@@ -33,8 +33,8 @@ These skills compose into a full research lifecycle:
 ### Full Pipeline 🚀
 
 ```
-/research-lit → /novelty-check → implement → /run-experiment → /auto-review-loop → submit
-  (survey)       (verify novel)    (code)      (deploy & run)    (review & fix)     (done!)
+/research-lit → /idea-creator → /novelty-check → implement → /run-experiment → /auto-review-loop → submit
+  (survey)      (brainstorm)    (verify novel)    (code)      (deploy & run)    (review & fix)     (done!)
 ```
 
 ### Workflow 1: Auto Research Loop 🔁 (sleep & wake up to results)
@@ -86,27 +86,35 @@ These skills compose into a full research lifecycle:
 ┌─────────────────────────────────────────────────────────────┐
 │                  Idea Discovery                              │
 │                                                              │
-│   /research-lit        /novelty-check    /research-review    │
-│   (find papers)        (verify novelty)  (critical feedback) │
-│         │                    │                  │            │
-│         ▼                    ▼                  ▼            │
-│   ┌──────────┐        ┌──────────┐       ┌──────────┐      │
-│   │ Search   │        │ Check if │       │ External │      │
-│   │ arXiv,   │───────▶│ idea is  │──────▶│ LLM      │      │
-│   │ Scholar  │        │ novel    │       │ evaluates│      │
-│   │ for gaps │        │          │       │ your idea│      │
-│   └──────────┘        └──────────┘       └──────────┘      │
+│   /research-lit     /idea-creator     /novelty-check         │
+│   (find papers)     (brainstorm)      (verify novelty)       │
+│         │                │                  │                │
+│         ▼                ▼                  ▼                │
+│   ┌──────────┐     ┌──────────┐       ┌──────────┐         │
+│   │ Search   │────▶│ Generate │──────▶│ Check if │         │
+│   │ arXiv,   │     │ 8-12     │       │ idea is  │         │
+│   │ Scholar  │     │ ideas    │       │ novel    │         │
+│   │ for gaps │     │ + rank   │       │          │         │
+│   └──────────┘     └──────────┘       └──────────┘         │
+│                          │                  │                │
+│                          ▼                  ▼                │
+│                    ┌──────────┐       ┌──────────┐         │
+│                    │ Filter   │──────▶│ External │         │
+│                    │ by cost, │       │ LLM      │         │
+│                    │ novelty  │       │ evaluates│         │
+│                    └──────────┘       └──────────┘         │
 │                                                              │
 │   Typical flow:                                              │
 │   1. /research-lit "discrete diffusion models"               │
-│   2. Read the landscape summary, spot a gap                  │
-│   3. /novelty-check "my idea to fix X using Y"              │
-│   4. /research-review "my idea..." (if novel enough)         │
-│   5. Iterate on the idea with critical feedback              │
+│   2. /idea-creator "factorized gap in D-LLMs"               │
+│   3. Review ranked ideas, pick top 2-3                       │
+│   4. /novelty-check "top idea" (deep verification)           │
+│   5. /research-review "top idea" (critical feedback)         │
+│   6. Implement → /run-experiment → /auto-review-loop         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Skills involved:** `research-lit` + `novelty-check` + `research-review`
+**Skills involved:** `research-lit` + `idea-creator` + `novelty-check` + `research-review`
 
 📝 **Blog post:** [Claude Code 两月 NeurIPS 指北](http://xhslink.com/o/7IvAJQ41IBA)
 
@@ -116,6 +124,7 @@ These skills compose into a full research lifecycle:
 
 | Skill | Description | Needs Codex MCP? |
 |-------|-------------|-----------------|
+| 💡 [`idea-creator`](skills/idea-creator/SKILL.md) | Generate and rank research ideas given a broad direction (brainstorm + filter + validate) | Yes |
 | 🔬 [`research-review`](skills/research-review/SKILL.md) | Single-round deep review from external LLM (xhigh reasoning) | Yes |
 | 🔁 [`auto-review-loop`](skills/auto-review-loop/SKILL.md) | Autonomous multi-round review→fix→re-review loop (max 4 rounds) | Yes |
 | 📚 [`research-lit`](skills/research-lit/SKILL.md) | Search papers, analyze related work, find research gaps | No |

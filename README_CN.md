@@ -33,8 +33,8 @@
 ### 完整流程 🚀
 
 ```
-/research-lit → /novelty-check → 实现 → /run-experiment → /auto-review-loop → 投稿
-  (调研文献)      (查新验证)     (写代码)   (部署跑实验)     (自动改到能投)     (搞定!)
+/research-lit → /idea-creator → /novelty-check → 实现 → /run-experiment → /auto-review-loop → 投稿
+  (调研文献)      (找idea)       (查新验证)     (写代码)   (部署跑实验)     (自动改到能投)     (搞定!)
 ```
 
 ### 工作流 1：自动科研循环 🔁（睡一觉醒来看结果）
@@ -67,14 +67,15 @@
 
 > "这个领域最新进展是什么？哪里有 gap？"
 
-**涉及 Skills：** `research-lit` + `novelty-check` + `research-review`
+**涉及 Skills：** `research-lit` + `idea-creator` + `novelty-check` + `research-review`
 
 ```
 1. /research-lit "discrete diffusion models"    ← 搜论文，整理全景
-2. 读完全景，发现一个 gap
-3. /novelty-check "我的 idea 是用 X 来解决 Y"   ← 查新：有没有人做过？
-4. /research-review "我的 idea 是用 X 来解决 Y"   ← 让外部 LLM 批判你的想法
-5. 根据反馈迭代
+2. /idea-creator "factorized gap in D-LLMs"     ← 自动生成 8-12 个 idea，筛选排序
+3. 选 top 2-3 个 idea
+4. /novelty-check "top idea"                     ← 查新：有没有人做过？
+5. /research-review "top idea"                   ← 让外部 LLM 批判你的想法
+6. 实现 → /run-experiment → /auto-review-loop    ← 闭环！
 ```
 
 📝 **博客：** [Claude Code 两月 NeurIPS 指北](http://xhslink.com/o/7IvAJQ41IBA)
@@ -85,6 +86,7 @@
 
 | Skill | 功能 | 需要 Codex MCP？ |
 |-------|------|-----------------|
+| 💡 [`idea-creator`](skills/idea-creator/SKILL.md) | 给定研究方向，自动生成、筛选、排序研究 idea | 是 |
 | 🔬 [`research-review`](skills/research-review/SKILL.md) | 单轮深度评审（外部 LLM，xhigh 推理） | 是 |
 | 🔁 [`auto-review-loop`](skills/auto-review-loop/SKILL.md) | 多轮自动 review→修复→再 review 循环（最多 4 轮） | 是 |
 | 📚 [`research-lit`](skills/research-lit/SKILL.md) | 搜论文、分析相关工作、找研究空白 | 否 |
