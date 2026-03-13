@@ -50,7 +50,7 @@ See [full setup guide](#%EF%B8%8F-setup) for details and [alternative model comb
 - 🖥️ **GPU deployment** — auto rsync, screen sessions, multi-GPU parallel experiments, live monitoring
 - 🔀 **Flexible models** — default Claude × GPT-5.4, also supports [GLM + GPT, GLM + MiniMax](#-alternative-model-combinations) — no Claude API required
 - 🛑 **Human-in-the-loop** — configurable checkpoints at key decisions. `AUTO_PROCEED=true` for full autopilot, `false` to approve each step
-- 📊 **16 composable skills** — mix and match, or chain into full pipelines (`/idea-discovery`, `/auto-review-loop`, `/research-pipeline`)
+- 📊 **17 composable skills** — mix and match, or chain into full pipelines (`/idea-discovery`, `/auto-review-loop`, `/research-pipeline`)
 
 ---
 
@@ -74,7 +74,7 @@ These skills compose into a full research lifecycle. The three workflows can be 
 
 - **Exploring a new area (e.g., writing a survey)?** Start with Workflow 1 → `/idea-discovery`
 - **Already have an idea + initial plan?** Jump straight to Workflow 2 → `/auto-review-loop`
-- **Ready to write the paper?** Workflow 3 → `/paper-plan` → `/paper-figure` → `/paper-write` → `/paper-compile`
+- **Ready to write the paper?** Workflow 3 → `/paper-writing` (or step by step: `/paper-plan` → `/paper-figure` → `/paper-write` → `/paper-compile` → `/auto-paper-improvement-loop`)
 - **Full pipeline?** Workflow 1 → Workflow 2 → Workflow 3 → `/research-pipeline` — from literature survey all the way to submission
 
 > ⚠️ **Important:** These tools accelerate research, but they don't replace your own critical thinking. Always review generated ideas with your domain expertise, question the assumptions, and make the final call yourself. The best research comes from human insight + AI execution, not full autopilot.
@@ -229,7 +229,9 @@ The output is a ranked `IDEA_REPORT.md` with hypotheses, pilot results, reviewer
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Skills involved:** `paper-plan` + `paper-figure` + `paper-write` + `paper-compile`
+**Skills involved:** `paper-plan` + `paper-figure` + `paper-write` + `paper-compile` + `auto-paper-improvement-loop`
+
+> **One-command shortcut:** `/paper-writing "NARRATIVE_REPORT.md"` runs this entire workflow automatically.
 
 **Input:** A `NARRATIVE_REPORT.md` describing the research: claims, experiments, results, figures. The more detailed the narrative (especially figure descriptions and quantitative results), the better the output.
 
@@ -308,6 +310,7 @@ All three PDFs preserved for comparison: `main_round0_original.pdf`, `main_round
 | ✍️ [`paper-write`](skills/paper-write/SKILL.md) | Section-by-section LaTeX generation with ICLR/NeurIPS/ICML templates | Yes |
 | 🔨 [`paper-compile`](skills/paper-compile/SKILL.md) | Compile LaTeX to PDF, auto-fix errors, submission readiness checks | No |
 | 🔄 [`auto-paper-improvement-loop`](skills/auto-paper-improvement-loop/SKILL.md) | 2-round review→fix→recompile loop on generated paper (4/10 → 7/10) | Yes |
+| 📝 [`paper-writing`](skills/paper-writing/SKILL.md) | **Workflow 3 pipeline**: paper-plan → paper-figure → paper-write → paper-compile → auto-paper-improvement-loop | Yes |
 
 ---
 

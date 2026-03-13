@@ -50,7 +50,7 @@ claude
 - 🖥️ **GPU 部署** — 自动 rsync、screen 会话、多 GPU 并行实验、实时监控
 - 🔀 **灵活模型** — 默认 Claude × GPT-5.4，也支持 [GLM + GPT、GLM + MiniMax](#-替代模型组合)——无需 Claude API
 - 🛑 **Human-in-the-loop** — 关键决策点可配置检查点。`AUTO_PROCEED=true` 全自动，`false` 逐步审批
-- 📊 **16 个可组合 skill** — 自由混搭，或串联为完整流水线（`/idea-discovery`、`/auto-review-loop`、`/research-pipeline`）
+- 📊 **17 个可组合 skill** — 自由混搭，或串联为完整流水线（`/idea-discovery`、`/auto-review-loop`、`/research-pipeline`）
 
 ---
 
@@ -74,7 +74,7 @@ claude
 
 - **探索新方向（比如写 survey）？** 从工作流 1 开始 → `/idea-discovery`
 - **已有 idea + 初步方案？** 直接用工作流 2 → `/auto-review-loop`
-- **准备写论文了？** 工作流 3 → `/paper-plan` → `/paper-figure` → `/paper-write` → `/paper-compile`
+- **准备写论文了？** 工作流 3 → `/paper-writing`（或分步：`/paper-plan` → `/paper-figure` → `/paper-write` → `/paper-compile` → `/auto-paper-improvement-loop`）
 - **全流程？** 工作流 1 → 工作流 2 → 工作流 3 → `/research-pipeline`，从文献调研一路到投稿
 
 > ⚠️ **重要提醒：** 这些工具加速科研，但不能替代你自己的思考。生成的 idea 一定要用你的领域知识审视，质疑其假设，最终决策权在你手上。最好的研究 = 人的洞察 + AI 的执行力，而不是全自动流水线。
@@ -157,7 +157,9 @@ claude
 
 > "把我的研究报告变成可投稿的 PDF。"
 
-**涉及 Skills：** `paper-plan` + `paper-figure` + `paper-write` + `paper-compile`
+**涉及 Skills：** `paper-plan` + `paper-figure` + `paper-write` + `paper-compile` + `auto-paper-improvement-loop`
+
+> **一键调用：** `/paper-writing "NARRATIVE_REPORT.md"` 自动跑完整个工作流 3。
 
 **输入：** 一份 `NARRATIVE_REPORT.md`，描述研究内容：声明、实验、结果、图表。叙事越详细（尤其是图表描述和定量结果），输出越好。
 
@@ -250,6 +252,7 @@ NARRATIVE_REPORT.md ──► /paper-plan ──► /paper-figure ──► /pap
 | ✍️ [`paper-write`](skills/paper-write/SKILL.md) | 逐 section LaTeX 生成，支持 ICLR/NeurIPS/ICML 模板 | 是 |
 | 🔨 [`paper-compile`](skills/paper-compile/SKILL.md) | 编译 LaTeX 为 PDF，自动修复错误，投稿就绪检查 | 否 |
 | 🔄 [`auto-paper-improvement-loop`](skills/auto-paper-improvement-loop/SKILL.md) | 2 轮审稿→修复→重编译循环（4/10 → 7/10） | 是 |
+| 📝 [`paper-writing`](skills/paper-writing/SKILL.md) | **工作流 3 全流程**：paper-plan → paper-figure → paper-write → paper-compile → auto-paper-improvement-loop | 是 |
 
 ---
 
