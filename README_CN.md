@@ -454,6 +454,8 @@ claude
   - **仅推送** — 关键节点（实验完成、review 出分、checkpoint 等待）发飞书 webhook 通知。无需额外进程，skill 里 `curl` 一下就行。手机收推送，不能回复
   - **双向交互** — 通过 [feishu-claude-code](https://github.com/joewongjc/feishu-claude-code) 全双工桥接。在飞书里审批/拒绝 idea、回复 checkpoint。需要 `python main.py` 和 Claude Code 同时运行（可都丢服务器 `screen` 里常驻）
   - 相关项目：[clawdbot-feishu](https://github.com/m1heng/clawdbot-feishu)（3.7k⭐）、[cc-connect](https://github.com/chenhg5/cc-connect)（多平台桥接）、[lark-openapi-mcp](https://github.com/larksuite/lark-openapi-mcp)（官方，424⭐）
+- [ ] **W&B 集成** — 从 Weights & Biases 拉取训练曲线和指标作为反馈信号。auto-review-loop 可读取 loss/accuracy 图诊断训练问题并建议下一步实验
+  - 相关项目：[wandb-mcp-server](https://github.com/wandb/mcp-server)（W&B 官方 MCP，如有）或通过 `wandb api` CLI
 - [ ] **Zotero MCP 集成** — 直接读取 Zotero 论文库的论文、标签和批注
   - 相关项目：[zotero-mcp](https://github.com/54yyyu/zotero-mcp)（1.8k⭐，语义搜索）、[arxiv-mcp-server](https://github.com/blazickjp/arxiv-mcp-server)（2.3k⭐，arXiv 搜索）、[paper-search-mcp](https://github.com/openags/paper-search-mcp)（782⭐，多源学术搜索）
 - [ ] 更多执行者 × 评审者组合（Gemini、DeepSeek 等）

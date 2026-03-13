@@ -507,6 +507,8 @@ This lets GLM (acting as Claude Code) familiarize itself with the skill files an
   - **Push only** — lightweight webhook notifications at key events (experiment done, review scored, checkpoint waiting). No extra process needed, just `curl` from within skills. Mobile push, no reply
   - **Interactive** — full bidirectional via [feishu-claude-code](https://github.com/joewongjc/feishu-claude-code). Approve/reject ideas, reply to checkpoints from Feishu. Requires `python main.py` running alongside Claude Code (both can run on a remote server via `screen`)
   - Related projects: [clawdbot-feishu](https://github.com/m1heng/clawdbot-feishu) (3.7k⭐), [cc-connect](https://github.com/chenhg5/cc-connect) (multi-platform bridge), [lark-openapi-mcp](https://github.com/larksuite/lark-openapi-mcp) (official, 424⭐)
+- [ ] **W&B integration** — pull training curves and metrics from Weights & Biases as feedback signal. Auto-review-loop can read loss/accuracy plots to diagnose training issues and suggest next experiments
+  - Related projects: [wandb-mcp-server](https://github.com/wandb/mcp-server) (official W&B MCP, if available), or via `wandb api` CLI
 - [ ] **Zotero MCP integration** — read papers, tags, and annotations directly from Zotero library
   - Related projects: [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (1.8k⭐, semantic search), [arxiv-mcp-server](https://github.com/blazickjp/arxiv-mcp-server) (2.3k⭐, arXiv search), [paper-search-mcp](https://github.com/openags/paper-search-mcp) (782⭐, multi-source academic search)
 - [ ] More executor × reviewer combinations (Gemini, DeepSeek, etc.)
