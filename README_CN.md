@@ -340,31 +340,55 @@ NARRATIVE_REPORT.md ──► /paper-plan ──► /paper-figure ──► /pap
 
 ## 🧰 全部 Skills
 
-| Skill | 功能 | 需要 Codex MCP？ |
-|-------|------|-----------------|
-| 💡 [`idea-creator`](skills/idea-creator/SKILL.md) | 给定研究方向，自动生成、筛选、排序研究 idea | 是 |
-| 🔬 [`research-review`](skills/research-review/SKILL.md) | 单轮深度评审（外部 LLM，xhigh 推理） | 是 |
-| 🔁 [`auto-review-loop`](skills/auto-review-loop/SKILL.md) | 多轮自动 review→修复→再 review 循环（最多 4 轮） | 是 |
-| 🔁 [`auto-review-loop-llm`](skills/auto-review-loop-llm/SKILL.md) | 同上，但使用任意 OpenAI 兼容 API（DeepSeek、MiniMax、Kimi 等），通过 [`llm-chat`](mcp-servers/llm-chat/) MCP 服务器 | 否（使用 llm-chat MCP） |
-| 📚 [`research-lit`](skills/research-lit/SKILL.md) | 搜索 [Zotero](#-zotero-集成可选) + [Obsidian](#-obsidian-集成可选) + 本地 PDF + [arXiv API](#arxiv-集成) + 网络，分析相关工作、找空白 | 否（可选：Zotero/Obsidian MCP） |
-| 📊 [`analyze-results`](skills/analyze-results/SKILL.md) | 分析实验结果、统计、生成对比表 | 否 |
-| 👀 [`monitor-experiment`](skills/monitor-experiment/SKILL.md) | 监控实验进度、收集结果 | 否 |
-| 🔍 [`novelty-check`](skills/novelty-check/SKILL.md) | 查新：验证研究 idea 是否已有人做过 | 是 |
-| 🚀 [`run-experiment`](skills/run-experiment/SKILL.md) | 部署实验到本地（MPS/CUDA）或远程 GPU 服务器 | 否 |
+### 🚀 全流程
+
+| Skill | 功能 | Codex MCP？ |
+|-------|------|:---:|
+| 🏗️ [`research-pipeline`](skills/research-pipeline/SKILL.md) | **端到端**：工作流 1 → 工作流 2 → 工作流 3，从研究方向到投稿 | 是 |
+
+### 🔍 工作流 1：Idea 发现与方案精炼
+
+| Skill | 功能 | Codex MCP？ |
+|-------|------|:---:|
+| 🔭 **[`idea-discovery`](skills/idea-discovery/SKILL.md)** | **流水线编排** — 按顺序调用以下全部 skill | 是 |
+| ├ 📚 [`research-lit`](skills/research-lit/SKILL.md) | 多源文献搜索（[Zotero](#-zotero-集成可选) + [Obsidian](#-obsidian-集成可选) + 本地 PDF + [arXiv API](#arxiv-集成) + 网络） | 否 |
+| ├ 💡 [`idea-creator`](skills/idea-creator/SKILL.md) | 头脑风暴 8-12 个 idea，按可行性筛选，GPU pilot，按信号排序 | 是 |
+| ├ 🔍 [`novelty-check`](skills/novelty-check/SKILL.md) | 多源查新 + GPT-5.4 交叉验证 | 是 |
+| ├ 🔬 [`research-review`](skills/research-review/SKILL.md) | 单轮深度评审（外部 LLM，xhigh 推理） | 是 |
+| └ 🧭 **[`research-refine-pipeline`](skills/research-refine-pipeline/SKILL.md)** | 方法精炼 + 实验规划一条龙 | 是 |
+| 　├ 🔬 [`research-refine`](skills/research-refine/SKILL.md) | 冻结问题锚点 → 迭代精炼方法（最多 5 轮，≥9 分停） | 是 |
+| 　└ 🧪 [`experiment-plan`](skills/experiment-plan/SKILL.md) | Claim-driven 实验路线图，含 ablation、预算和执行顺序 | 否 |
+
+### 🔁 工作流 2：自动科研循环
+
+| Skill | 功能 | Codex MCP？ |
+|-------|------|:---:|
+| 🔁 **[`auto-review-loop`](skills/auto-review-loop/SKILL.md)** | **流水线编排** — 自动 review→修复→再 review（最多 4 轮） | 是 |
+| ├ 🔬 [`research-review`](skills/research-review/SKILL.md) | 深度评审（与工作流 1 共用） | 是 |
+| ├ 🔍 [`novelty-check`](skills/novelty-check/SKILL.md) | 审稿人建议新方向时验证新颖性 | 是 |
+| ├ 🚀 [`run-experiment`](skills/run-experiment/SKILL.md) | 部署实验到本地（MPS/CUDA）或远程 GPU 服务器 | 否 |
+| ├ 📊 [`analyze-results`](skills/analyze-results/SKILL.md) | 分析实验结果、统计、生成对比表 | 否 |
+| └ 👀 [`monitor-experiment`](skills/monitor-experiment/SKILL.md) | 监控实验进度、收集结果 | 否 |
+| 🔁 [`auto-review-loop-llm`](skills/auto-review-loop-llm/SKILL.md) | 同上，但使用任意 OpenAI 兼容 API，通过 [`llm-chat`](mcp-servers/llm-chat/) MCP 服务器 | 否 |
+
+### 📝 工作流 3：论文写作
+
+| Skill | 功能 | Codex MCP？ |
+|-------|------|:---:|
+| 📝 **[`paper-writing`](skills/paper-writing/SKILL.md)** | **流水线编排** — 按顺序调用以下全部 skill | 是 |
+| ├ 📐 [`paper-plan`](skills/paper-plan/SKILL.md) | Claims-evidence 矩阵、章节结构、图表计划、引用规划 | 是 |
+| ├ 📊 [`paper-figure`](skills/paper-figure/SKILL.md) | 出版级 matplotlib/seaborn 图表 + LaTeX 对比表 | 可选 |
+| ├ ✍️ [`paper-write`](skills/paper-write/SKILL.md) | 逐 section LaTeX 生成（ICLR/NeurIPS/ICML）。通过 DBLP/CrossRef 反幻觉 BibTeX | 是 |
+| ├ 🔨 [`paper-compile`](skills/paper-compile/SKILL.md) | 编译 LaTeX 为 PDF，自动修复错误，投稿就绪检查 | 否 |
+| └ 🔄 [`auto-paper-improvement-loop`](skills/auto-paper-improvement-loop/SKILL.md) | 2 轮内容审稿 + 格式检查（4/10 → 8.5/10） | 是 |
+
+### 🛠️ 独立 / 工具类
+
+| Skill | 功能 | Codex MCP？ |
+|-------|------|:---:|
+| 📄 [`arxiv`](skills/arxiv/SKILL.md) | 搜索、下载、摘要 arXiv 论文。可独立使用或作为 `/research-lit` 补充 | 否 |
 | 🎨 [`pixel-art`](skills/pixel-art/SKILL.md) | 生成像素风 SVG 插图，用于 README、文档或幻灯片 | 否 |
-| 🔭 [`idea-discovery`](skills/idea-discovery/SKILL.md) | **工作流 1 全流程**：research-lit → idea-creator → novelty-check → research-review → research-refine | 是 |
-| 🔬 [`research-refine`](skills/research-refine/SKILL.md) | 把模糊方法想法精炼成问题锚点明确、可实现的研究方案 | 是 |
-| 🧪 [`experiment-plan`](skills/experiment-plan/SKILL.md) | 把 refined proposal 转成 claim-driven 实验路线图，含执行顺序和预算 | 否 |
-| 🧭 [`research-refine-pipeline`](skills/research-refine-pipeline/SKILL.md) | 一条龙完成方法精炼 + 实验规划：`research-refine` → `experiment-plan` | 是 |
-| 🏗️ [`research-pipeline`](skills/research-pipeline/SKILL.md) | **完整流水线**：工作流 1 → 实现 → 工作流 2 → 工作流 3，从方向到投稿 | 是 |
-| 📐 [`paper-plan`](skills/paper-plan/SKILL.md) | 生成论文大纲：claims-evidence 矩阵、图表计划、引用规划 | 是 |
-| 📊 [`paper-figure`](skills/paper-figure/SKILL.md) | 从实验数据生成出版级 matplotlib/seaborn 图表，含 LaTeX 插入代码 | 可选 |
-| ✍️ [`paper-write`](skills/paper-write/SKILL.md) | 逐 section LaTeX 生成，支持 ICLR/NeurIPS/ICML 模板。通过 DBLP/CrossRef 反幻觉 BibTeX | 是 |
-| 🔨 [`paper-compile`](skills/paper-compile/SKILL.md) | 编译 LaTeX 为 PDF，自动修复错误，投稿就绪检查 | 否 |
-| 🔄 [`auto-paper-improvement-loop`](skills/auto-paper-improvement-loop/SKILL.md) | 2 轮内容审稿 + 格式检查循环（4/10 → 8.5/10） | 是 |
-| 📝 [`paper-writing`](skills/paper-writing/SKILL.md) | **工作流 3 全流程**：paper-plan → paper-figure → paper-write → paper-compile → auto-paper-improvement-loop | 是 |
-| 📄 [`arxiv`](skills/arxiv/SKILL.md) | 搜索、下载、摘要 arXiv 论文。可独立使用或作为 `/research-lit` 的补充 | 否 |
-| 📱 [`feishu-notify`](skills/feishu-notify/SKILL.md) | [飞书](#-飞书lark-集成可选)通知——推送（webhook）或双向交互。默认关闭 | 否 |
+| 📱 [`feishu-notify`](skills/feishu-notify/SKILL.md) | [飞书](#-飞书lark-集成可选)推送（webhook）或双向交互。默认关闭 | 否 |
 
 ---
 

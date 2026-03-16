@@ -414,31 +414,55 @@ After Workflow 3 generates the paper, `/auto-paper-improvement-loop` runs 2 roun
 
 ## 🧰 All Skills
 
-| Skill | Description | Needs Codex MCP? |
-|-------|-------------|-----------------|
-| 💡 [`idea-creator`](skills/idea-creator/SKILL.md) | Generate and rank research ideas given a broad direction (brainstorm + filter + validate) | Yes |
-| 🔬 [`research-review`](skills/research-review/SKILL.md) | Single-round deep review from external LLM (xhigh reasoning) | Yes |
-| 🔁 [`auto-review-loop`](skills/auto-review-loop/SKILL.md) | Autonomous multi-round review→fix→re-review loop (max 4 rounds) | Yes |
-| 🔁 [`auto-review-loop-llm`](skills/auto-review-loop-llm/SKILL.md) | Same as above, but uses any OpenAI-compatible API via [`llm-chat`](mcp-servers/llm-chat/) MCP server (DeepSeek, MiniMax, Kimi, etc.) | No (uses llm-chat MCP) |
-| 📚 [`research-lit`](skills/research-lit/SKILL.md) | Scan [Zotero](#-zotero-integration-optional) + [Obsidian](#-obsidian-integration-optional) + local PDFs + [arXiv API](#arxiv-integration) + web search, analyze related work, find gaps | No (Optional: Zotero/Obsidian MCP) |
-| 📊 [`analyze-results`](skills/analyze-results/SKILL.md) | Analyze experiment results, compute statistics, generate insights | No |
-| 👀 [`monitor-experiment`](skills/monitor-experiment/SKILL.md) | Monitor running experiments, check progress, collect results | No |
-| 🔍 [`novelty-check`](skills/novelty-check/SKILL.md) | Verify research idea novelty against recent literature before implementing | Yes |
-| 🚀 [`run-experiment`](skills/run-experiment/SKILL.md) | Deploy experiments to local (MPS/CUDA) or remote GPU servers | No |
+### 🚀 Full Pipeline
+
+| Skill | Description | Codex MCP? |
+|-------|-------------|:---:|
+| 🏗️ [`research-pipeline`](skills/research-pipeline/SKILL.md) | **End-to-end**: Workflow 1 → Workflow 2 → Workflow 3, from research direction to submission | Yes |
+
+### 🔍 Workflow 1: Idea Discovery & Method Refinement
+
+| Skill | Description | Codex MCP? |
+|-------|-------------|:---:|
+| 🔭 **[`idea-discovery`](skills/idea-discovery/SKILL.md)** | **Pipeline orchestrator** — runs all skills below in sequence | Yes |
+| ├ 📚 [`research-lit`](skills/research-lit/SKILL.md) | Multi-source literature search ([Zotero](#-zotero-integration-optional) + [Obsidian](#-obsidian-integration-optional) + local PDFs + [arXiv API](#arxiv-integration) + web) | No |
+| ├ 💡 [`idea-creator`](skills/idea-creator/SKILL.md) | Brainstorm 8-12 ideas, filter by feasibility, pilot on GPU, rank by signal | Yes |
+| ├ 🔍 [`novelty-check`](skills/novelty-check/SKILL.md) | Verify idea novelty against recent literature (multi-source + GPT-5.4 cross-check) | Yes |
+| ├ 🔬 [`research-review`](skills/research-review/SKILL.md) | Single-round deep review from external LLM (xhigh reasoning) | Yes |
+| └ 🧭 **[`research-refine-pipeline`](skills/research-refine-pipeline/SKILL.md)** | Refine method + plan experiments in one chain | Yes |
+| 　├ 🔬 [`research-refine`](skills/research-refine/SKILL.md) | Problem anchor → iterative method refinement (up to 5 rounds, score ≥ 9) | Yes |
+| 　└ 🧪 [`experiment-plan`](skills/experiment-plan/SKILL.md) | Claim-driven experiment roadmap with ablations, budgets, and run order | No |
+
+### 🔁 Workflow 2: Auto Research Loop
+
+| Skill | Description | Codex MCP? |
+|-------|-------------|:---:|
+| 🔁 **[`auto-review-loop`](skills/auto-review-loop/SKILL.md)** | **Pipeline orchestrator** — autonomous review→fix→re-review (max 4 rounds) | Yes |
+| ├ 🔬 [`research-review`](skills/research-review/SKILL.md) | Deep review from external LLM (shared with Workflow 1) | Yes |
+| ├ 🔍 [`novelty-check`](skills/novelty-check/SKILL.md) | Verify novelty when reviewer suggests new directions | Yes |
+| ├ 🚀 [`run-experiment`](skills/run-experiment/SKILL.md) | Deploy experiments to local (MPS/CUDA) or remote GPU servers | No |
+| ├ 📊 [`analyze-results`](skills/analyze-results/SKILL.md) | Analyze experiment results, compute statistics, generate insights | No |
+| └ 👀 [`monitor-experiment`](skills/monitor-experiment/SKILL.md) | Monitor running experiments, check progress, collect results | No |
+| 🔁 [`auto-review-loop-llm`](skills/auto-review-loop-llm/SKILL.md) | Same as above, but uses any OpenAI-compatible API via [`llm-chat`](mcp-servers/llm-chat/) MCP server | No |
+
+### 📝 Workflow 3: Paper Writing
+
+| Skill | Description | Codex MCP? |
+|-------|-------------|:---:|
+| 📝 **[`paper-writing`](skills/paper-writing/SKILL.md)** | **Pipeline orchestrator** — runs all skills below in sequence | Yes |
+| ├ 📐 [`paper-plan`](skills/paper-plan/SKILL.md) | Claims-evidence matrix, section structure, figure plan, citation scaffolding | Yes |
+| ├ 📊 [`paper-figure`](skills/paper-figure/SKILL.md) | Publication-quality matplotlib/seaborn plots + LaTeX comparison tables | Optional |
+| ├ ✍️ [`paper-write`](skills/paper-write/SKILL.md) | Section-by-section LaTeX generation (ICLR/NeurIPS/ICML). Anti-hallucination BibTeX via DBLP/CrossRef | Yes |
+| ├ 🔨 [`paper-compile`](skills/paper-compile/SKILL.md) | Compile LaTeX to PDF, auto-fix errors, submission readiness checks | No |
+| └ 🔄 [`auto-paper-improvement-loop`](skills/auto-paper-improvement-loop/SKILL.md) | 2-round content review + format check (4/10 → 8.5/10) | Yes |
+
+### 🛠️ Standalone / Utility
+
+| Skill | Description | Codex MCP? |
+|-------|-------------|:---:|
+| 📄 [`arxiv`](skills/arxiv/SKILL.md) | Search, download, and summarize arXiv papers. Standalone or `/research-lit` supplement | No |
 | 🎨 [`pixel-art`](skills/pixel-art/SKILL.md) | Generate pixel art SVG illustrations for READMEs, docs, or slides | No |
-| 🔭 [`idea-discovery`](skills/idea-discovery/SKILL.md) | **Workflow 1 pipeline**: research-lit → idea-creator → novelty-check → research-review → research-refine | Yes |
-| 🔬 [`research-refine`](skills/research-refine/SKILL.md) | Refine a vague method idea into a problem-anchored, implementation-oriented proposal | Yes |
-| 🧪 [`experiment-plan`](skills/experiment-plan/SKILL.md) | Turn a refined proposal into a claim-driven experiment roadmap with run order and budgets | No |
-| 🧭 [`research-refine-pipeline`](skills/research-refine-pipeline/SKILL.md) | Proposal refinement + experiment planning in one chain: `research-refine` → `experiment-plan` | Yes |
-| 🏗️ [`research-pipeline`](skills/research-pipeline/SKILL.md) | **Full pipeline**: Workflow 1 → implement → Workflow 2 → Workflow 3, from direction to submission | Yes |
-| 📐 [`paper-plan`](skills/paper-plan/SKILL.md) | Generate paper outline with claims-evidence matrix, figure plan, and citation scaffolding | Yes |
-| 📊 [`paper-figure`](skills/paper-figure/SKILL.md) | Publication-quality matplotlib/seaborn plots from experiment data, with LaTeX snippets | Optional |
-| ✍️ [`paper-write`](skills/paper-write/SKILL.md) | Section-by-section LaTeX generation with ICLR/NeurIPS/ICML templates. Anti-hallucination BibTeX via DBLP/CrossRef | Yes |
-| 🔨 [`paper-compile`](skills/paper-compile/SKILL.md) | Compile LaTeX to PDF, auto-fix errors, submission readiness checks | No |
-| 🔄 [`auto-paper-improvement-loop`](skills/auto-paper-improvement-loop/SKILL.md) | 2-round content review + format check loop on generated paper (4/10 → 8.5/10) | Yes |
-| 📝 [`paper-writing`](skills/paper-writing/SKILL.md) | **Workflow 3 pipeline**: paper-plan → paper-figure → paper-write → paper-compile → auto-paper-improvement-loop | Yes |
-| 📄 [`arxiv`](skills/arxiv/SKILL.md) | Search, download, and summarize papers from arXiv. Standalone or as `/research-lit` supplement | No |
-| 📱 [`feishu-notify`](skills/feishu-notify/SKILL.md) | [Feishu/Lark](#-feishulark-integration-optional) notifications — push (webhook) or interactive (bidirectional). Off by default | No |
+| 📱 [`feishu-notify`](skills/feishu-notify/SKILL.md) | [Feishu/Lark](#-feishulark-integration-optional) push (webhook) or interactive (bidirectional). Off by default | No |
 
 ---
 
