@@ -147,12 +147,14 @@ claude
 
 > 💡 **使用方法：** 社区 skill 不会自动接入核心工作流。使用时，让你的执行者（Claude Code / OpenClaw 等）先读一遍该 skill 的 `SKILL.md`，再根据下方描述接入对应的工作流阶段。
 
-**社区 Skills（8 个）：** 方案精炼、实验规划、基金申请书、定理证明、通信领域文献检索、架构设计空间探索（EDA）、机器人 idea 发现、AI 作图。
+🎉 **社区 Skills（8 个）：** [research-refine](skills/research-refine/SKILL.md) · [experiment-plan](skills/experiment-plan/SKILL.md) · [grant-proposal](skills/grant-proposal/SKILL.md) · [proof-writer](skills/proof-writer/SKILL.md) · [comm-lit-review](skills/comm-lit-review/SKILL.md) · [dse-loop](skills/dse-loop/SKILL.md) · [idea-discovery-robot](skills/idea-discovery-robot/SKILL.md) · [paper-illustration](skills/paper-illustration/SKILL.md)
 
-**外部项目 & 文档（4 个）：** 开源加固流水线、引用影响力分析、OpenClaw 适配指南、AI 学术插图。
+🌐 **外部项目 & 文档（4 个）：** [open-source-hardening-skills](https://github.com/zeyuzhangzyz/open-source-hardening-skills) · [CitationClaw](https://github.com/VisionXLab/CitationClaw) · [OpenClaw 适配指南](docs/OPENCLAW_ADAPTATION.md) · [paper-illustration](skills/paper-illustration/SKILL.md)
+
+> 🙌 感谢每一位贡献者！为了 README 的可读性，下方表格折叠展示——但每个 skill 和项目都同样珍贵。欢迎 PR！
 
 <details>
-<summary><b>社区 Skills（8 个）</b> — 点击展开</summary>
+<summary><b>🎉 社区 Skills（8 个）</b> — 点击展开</summary>
 
 | 名称 | 领域 | 描述 | Codex MCP？ |
 |------|------|------|-----------|
@@ -168,7 +170,7 @@ claude
 </details>
 
 <details>
-<summary><b>外部项目 & 文档（4 个）</b> — 点击展开</summary>
+<summary><b>🌐 外部项目 & 文档（4 个）</b> — 点击展开</summary>
 
 | 名称 | 领域 | 描述 |
 |------|------|------|

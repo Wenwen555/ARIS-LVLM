@@ -147,12 +147,14 @@ Domain-specific skills and external projects contributed by the community. PRs w
 
 > 💡 **How to use:** Community skills are not auto-wired into core workflows. To use one, ask your executor (Claude Code / OpenClaw / etc.) to read the skill's `SKILL.md`, then plug it into the appropriate workflow stage based on the description below.
 
-**Community Skills (8):** method refinement, experiment planning, grant proposals, proof writing, domain-specific lit review (communications), architecture exploration (EDA), robotics idea discovery, and AI figure generation.
+🎉 **Community Skills (8):** [research-refine](skills/research-refine/SKILL.md) · [experiment-plan](skills/experiment-plan/SKILL.md) · [grant-proposal](skills/grant-proposal/SKILL.md) · [proof-writer](skills/proof-writer/SKILL.md) · [comm-lit-review](skills/comm-lit-review/SKILL.md) · [dse-loop](skills/dse-loop/SKILL.md) · [idea-discovery-robot](skills/idea-discovery-robot/SKILL.md) · [paper-illustration](skills/paper-illustration/SKILL.md)
 
-**External Projects & Docs (4):** open-source hardening pipeline, citation impact analysis, OpenClaw adaptation guide.
+🌐 **External Projects & Docs (4):** [open-source-hardening-skills](https://github.com/zeyuzhangzyz/open-source-hardening-skills) · [CitationClaw](https://github.com/VisionXLab/CitationClaw) · [OpenClaw Adaptation Guide](docs/OPENCLAW_ADAPTATION.md) · [paper-illustration](skills/paper-illustration/SKILL.md)
+
+> 🙌 Thanks to every contributor! We fold the tables below to keep the README readable — but every skill and project here is equally valued. PRs always welcome!
 
 <details>
-<summary><b>Community Skills (8 skills)</b> — click to expand</summary>
+<summary><b>🎉 Community Skills (8)</b> — click to expand</summary>
 
 | Name | Domain | Description | Codex MCP? |
 |------|--------|-------------|-----------|
@@ -168,7 +170,7 @@ Domain-specific skills and external projects contributed by the community. PRs w
 </details>
 
 <details>
-<summary><b>External Projects & Docs (4)</b> — click to expand</summary>
+<summary><b>🌐 External Projects & Docs (4)</b> — click to expand</summary>
 
 | Name | Domain | Description |
 |------|--------|-------------|
