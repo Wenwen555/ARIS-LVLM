@@ -265,7 +265,14 @@
     <text x="275" y="166" font-size="8px" fill="#4aaa4a"> ████░ 78%</text>
     <text x="233" y="178" font-size="8px" fill="#4aaa4a">Loss: 2.341 → 1.872</text>
 
-    <line x1="202" y1="136" x2="222" y2="136" stroke="#e67e22" stroke-width="2" stroke-dasharray="4,2"/>
+    <!-- GPT-5.4 code review bubble between code and deploy -->
+    <rect x="195" y="108" width="36" height="56" fill="#f0faf0" stroke="#74AA63" stroke-width="1" rx="4"/>
+    <text x="213" y="120" text-anchor="middle" font-size="6px" fill="#74AA63" font-weight="bold">GPT-5.4</text>
+    <text x="213" y="130" text-anchor="middle" font-size="6px" fill="#74AA63">code</text>
+    <text x="213" y="140" text-anchor="middle" font-size="6px" fill="#74AA63">review</text>
+    <text x="213" y="153" text-anchor="middle" font-size="10px" fill="#27ae60">✓</text>
+
+    <line x1="202" y1="136" x2="222" y2="136" stroke="#74AA63" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
 
     <!-- Results panel -->
     <rect x="65" y="196" width="295" height="46" fill="#fff" stroke="#ddd" stroke-width="1" rx="6"/>
