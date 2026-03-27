@@ -1219,9 +1219,9 @@ Override inline: `/research-lit "topic" — sources: zotero, web`, `/research-li
 | Constant | Default | Description |
 |----------|---------|-------------|
 | `DBLP_BIBTEX` | true | Fetch real BibTeX from DBLP/CrossRef instead of LLM-generated entries |
-| `TARGET_VENUE` | `ICLR` | Target venue: `ICLR`, `NeurIPS`, `ICML`, `CVPR`, `ACL`, `AAAI`, `ACM` |
-| `ANONYMOUS` | true | Use anonymous author block for blind review |
-| `MAX_PAGES` | 9 | Main body page limit (excluding references) |
+| `TARGET_VENUE` | `ICLR` | Target venue: `ICLR`, `NeurIPS`, `ICML`, `CVPR`, `ACL`, `AAAI`, `ACM`, `IEEE_JOURNAL`, `IEEE_CONF` |
+| `ANONYMOUS` | true | Use anonymous author block for blind review. Note: most IEEE venues are NOT anonymous — set `false` for IEEE |
+| `MAX_PAGES` | 9 | Page limit. ML conferences: main body excl. refs. IEEE: total pages incl. refs |
 | `ILLUSTRATION` | `gemini` | AI illustration mode: `gemini` (default, needs `GEMINI_API_KEY`), `mermaid` (free), or `false` (skip) |
 
 Override inline: `/paper-write — target venue: NeurIPS, illustration: mermaid`

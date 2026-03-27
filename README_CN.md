@@ -1028,9 +1028,9 @@ Skills 就是普通的 Markdown 文件，fork 后随意改：
 | 常量 | 默认值 | 说明 |
 |------|--------|------|
 | `DBLP_BIBTEX` | true | 从 DBLP/CrossRef 拉取真实 BibTeX，替代 LLM 生成的条目 |
-| `TARGET_VENUE` | `ICLR` | 目标会议格式：`ICLR`、`NeurIPS`、`ICML` |
-| `ANONYMOUS` | true | 匿名审稿模式 |
-| `MAX_PAGES` | 9 | 正文页数上限（不含参考文献） |
+| `TARGET_VENUE` | `ICLR` | 目标会议/期刊格式：`ICLR`、`NeurIPS`、`ICML`、`CVPR`、`ACL`、`AAAI`、`ACM`、`IEEE_JOURNAL`、`IEEE_CONF` |
+| `ANONYMOUS` | true | 匿名审稿模式。注意：大多数 IEEE 期刊/会议不匿名，IEEE 时设为 `false` |
+| `MAX_PAGES` | 9 | 页数上限。ML 会议：正文不含参考文献。IEEE：总页数含参考文献 |
 | `ILLUSTRATION` | `gemini` | AI 作图：`gemini`（默认，需 API key）、`mermaid`（免费）、`false`（跳过） |
 
 行内覆盖：`/paper-write — target venue: NeurIPS, illustration: true`
