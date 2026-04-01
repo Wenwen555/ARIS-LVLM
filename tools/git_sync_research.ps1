@@ -8,6 +8,73 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+function Sync-Skills {
+    <#
+    .SYNOPSIS
+    Sync project-level skills to user-level Claude skills directory.
+
+    .DESCRIPTION
+    Copies skills from ./skills/ to ~/.claude/skills/ so Claude Code can discover them.
+    This bridges the gap between git-trackable storage and actual skill discovery.
+    #>
+
+    $projectSkillsDir = Join-Path $repoRoot "skills"
+    $userSkillsDir = Join-Path $env:USERPROFILE ".claude" "skills"
+
+    if (-not (Test-Path $projectSkillsDir)) {
+        Write-Host "No project skills directory found." -ForegroundColor Yellow
+        return
+    }
+
+    # Ensure user skills directory exists
+    if (-not (Test-Path $userSkillsDir)) {
+        New-Item -ItemType Directory -Path $userSkillsDir -Force | Out-Null
+        Write-Host "Created user skills directory: $userSkillsDir" -ForegroundColor Green
+    }
+
+    # Get all project skills
+    $projectSkills = Get-ChildItem -Path $projectSkillsDir -Directory |
+        Where-Object { Test-Path (Join-Path $_.FullName "SKILL.md") }
+
+    $synced = 0
+    $skipped = 0
+
+    foreach ($skillDir in $projectSkills) {
+        $skillName = $skillDir.Name
+        $targetDir = Join-Path $userSkillsDir $skillName
+
+        # Check if skill exists and is identical (by comparing SKILL.md hash)
+        $sourceSkillMd = Join-Path $skillDir.FullName "SKILL.md"
+        $targetSkillMd = Join-Path $targetDir "SKILL.md"
+
+        $needSync = -not (Test-Path $targetDir)
+
+        if (-not $needSync -and (Test-Path $targetSkillMd)) {
+            $sourceHash = (Get-FileHash $sourceSkillMd -Algorithm MD5).Hash
+            $targetHash = (Get-FileHash $targetSkillMd -Algorithm MD5).Hash
+            $needSync = $sourceHash -ne $targetHash
+        }
+
+        if ($needSync) {
+            # Remove old version if exists
+            if (Test-Path $targetDir) {
+                Remove-Item -Path $targetDir -Recurse -Force
+            }
+
+            # Copy new version
+            Copy-Item -Path $skillDir.FullName -Destination $targetDir -Recurse -Force
+            Write-Host "  Synced: $skillName" -ForegroundColor Cyan
+            $synced++
+        } else {
+            $skipped++
+        }
+    }
+
+    Write-Host ""
+    Write-Host "Skills sync complete: $synced updated, $skipped unchanged." -ForegroundColor Green
+    Write-Host "Skills are now available in Claude Code." -ForegroundColor Green
+}
+
 function Invoke-Git {
     param(
         [Parameter(Mandatory = $true)]
@@ -151,3 +218,8 @@ Write-Host ""
 Write-Host "Sync complete." -ForegroundColor Green
 Write-Host "Synchronized remote/branch: $syncRemoteBranch"
 Write-Host "You can now continue from another computer after pulling branch '$currentBranch'."
+
+# Sync skills to user-level directory
+Write-Host ""
+Write-Host "Syncing skills to user-level..." -ForegroundColor Magenta
+Sync-Skills

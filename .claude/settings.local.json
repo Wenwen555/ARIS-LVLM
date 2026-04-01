@@ -14,7 +14,10 @@
       "WebFetch(domain:videohallucer.github.io)",
       "WebFetch(domain:arxiv.org)",
       "Bash(python tools/install_skills.py --check)",
-      "Bash(python tools/install_skills.py --clean-user)"
+      "Bash(python tools/install_skills.py --clean-user)",
+      "Bash(claude skills:*)",
+      "Bash(powershell -File tools/git_sync_research.ps1)",
+      "Bash(powershell -File tools/git_sync_research.ps1 -CommitMessage \"feat: add project-level skills sync to git workflow\")"
     ]
   },
   "enabledPlugins": {
