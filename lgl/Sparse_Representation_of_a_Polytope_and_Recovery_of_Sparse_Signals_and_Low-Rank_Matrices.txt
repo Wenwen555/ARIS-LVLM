@@ -1,0 +1,1001 @@
+122                                                                      IEEE TRANSACTIONS ON INFORMATION THEORY, VOL. 60, NO. 1, JANUARY 2014
+
+
+
+
+  Sparse Representation of a Polytope and Recovery
+      of Sparse Signals and Low-Rank Matrices
+                                                        T. Tony Cai and Anru Zhang
+
+
+   Abstract— This paper considers compressed sensing and affine              The goal is to recover the unknown signal β ∈ R p based on
+rank minimization in both noiseless and noisy cases and estab-               the measurement matrix A and the observed signal y. The
+lishes sharp restricted isometry conditions for sparse signal                constrained 1 minimization method proposed by Candés and
+and low-rank matrix recovery. The analysis relies on a key
+technical tool, which represents points in a polytope by convex              Tao [11] estimates the signal β by
+combinations of sparse vectors. The technique is elementary while
+                                                                                      β̂ = arg min{β1 : subject to Aβ − y ∈ B},                   (2)
+yielding sharp results. It is shown that  for any given constant                            β∈R p
+t ≥ 4/3, in compressed sensing, δ tAk < (t − 1)/t guarantees the
+exact recovery of all k sparse signals in the noiseless case through         where B is a set determined by the noise structure. In particu-
+the constrained 1 minimization,
+                                    and similarly, in affine rank           lar, B is taken to be {0} in the noiseless case. This constrained
+minimization, δ M
+                tr  <    (t − 1)/t ensures  the exact reconstruction         1 minimization method has now been well studied and it is
+of all matrices with rank at most r in the noiseless case via
+                                                                             understood that the procedure provides an efficient method for
+the constrained nuclear norm minimization. In addition, for
+                          t −1 +  is not sufficient to guarantee            sparse signal recovery.
+any  > 0, δ tAk <          t                                                   A closely related problem to compressed sensing is the
+the exact recovery of all k-sparse signals for large k. Similar
+results also                                                                 affine rank minimization problem (ARMP) (Recht et al. [26]),
+         hold for matrix recovery.  In addition, the conditions
+δ tAk < (t − 1)/t and δ M    tr <    (t − 1)/t are also shown to             which aims to recover an unknown low-rank matrix based on
+be sufficient, respectively, for stable recovery of approximately            its affine transformation. In ARMP, one observes
+sparse signals and low-rank matrices in the noisy case.
+                                                                                                         b = M(X) + z,                              (3)
+   Index Terms— Affine rank minimization, compressed sensing,
+constrained 1 minimization, low-rank matrix recovery, con-                  where M : Rm×n → Rq is a known linear map, X ∈ Rm×n
+strained nuclear norm minimization, restricted isometry, sparse              is an unknown low-rank matrix of interest, and z ∈ Rq
+signal recovery.
+                                                                             is measurement error. The goal is to recover the low-rank
+                                                                             matrix X based on the linear map M and the observation
+                         I. I NTRODUCTION                                    b ∈ Rq . Constrained nuclear norm minimization [26], which is
+                                                                             analogous to 1 minimization in compressed sensing, estimates
+E    FFICIENT recovery of sparse signals and low-rank matri-
+     ces has been a very active area of recent research in
+applied mathematics, statistics, and machine learning, with
+                                                                             X by
+
+many important applications, ranging from signal processing                       X ∗ = arg min{B∗ : subject to M(B) − b ∈ B},                    (4)
+                                                                                         B∈Rm×n
+[16], [28] to medical imaging [22] to radar systems [3],
+[21]. A central goal is to develop fast algorithms that can                  where B∗ is the nuclear norm of B, which is defined as the
+recover sparse signals and low-rank matrices from a relatively               sum of all singular values of B.
+small number of linear measurements. Constrained 1 -norm                       One of the most widely used frameworks in compressed
+minimization and nuclear norm minimization are among the                     sensing is the restrict isometry property (RIP) introduced in
+most well-known algorithms for the recovery of sparse signals                Candés and Tao [11]. A vector β ∈ R p is called s-sparse if
+and low-rank matrices respectively.                                          |supp(β)| ≤ s, where supp(β) = {i : βi = 0} is the support
+  In compressed sensing, one observes                                        of β.
+                                                                                Definition 1.1: Suppose A ∈ Rn× p is a measurement
+                             y = Aβ + z,                              (1)    matrix and 1 ≤ s ≤ p is an integer. The restricted isometry
+where y ∈ Rn , A ∈ Rn× p with n  p, β ∈ R p is an unknown                   constant (RIC) of order s is defined as the smallest number
+sparse signal, and z ∈ Rn is a vector of measurement errors.                 δkA such that for all s-sparse vectors β ∈ R p ,
+
+  Manuscript received May 30, 2013; revised September 17, 2013; accepted                 (1 − δsA )β22 ≤ Aβ22 ≤ (1 + δsA )β22 .               (5)
+October 21, 2013. Date of publication November 5, 2013; date of current
+version December 20, 2013. This work was supported in part by the NSF        When s is not an integer, we define δsA as δ As .
+FRG under Grant DMS-0854973 and in part by the NIH under Grant R01              Different conditions on the RIC for sparse signal recov-
+CA127334-05.                                                                 ery have been introduced and studied in the literature. For
+  The authors are with the Department of Statistics, The Wharton
+School, University of Pennsylvania, Philadelphia, PA 19104 USA (e-mail:      example, sufficient conditions √ for the exact recovery in the
+tcai@wharton.upenn.edu; anrzhang@wharton.upenn.edu).                         noiseless case include δ2k < 2 − 1 in [14], δ2k < 0.472
+  Communicated by O. Milenkovic, Associate Editor for Coding Theory.         in [6], δ2k < 0.497 in [23], δk < 0.307 in [8], δk < 1/3 and
+  Color versions of one or more of the figures in this paper are available
+online at http://ieeexplore.ieee.org.                                        δ2k ≤ 1/2 in [9]. There are also other sufficient conditions that
+  Digital Object Identifier 10.1109/TIT.2013.2288639                                                                    A +3δ A < 2 in [12],
+                                                                             involve the RIC of different orders, e.g. δ3k     4k
+                                                               0018-9448 © 2013 IEEE
+
+      Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+CAI AND ZHANG: SPARSE REPRESENTATION OF A POLYTOPE                                                                                                  123
+
+
+       A < 1 in [10], δ A < 0.5746 jointly with δ A < 1, δ A <
+δkA +δ2k                    2k                         8k √    3k            Lemma 1.1 shows that any point v ∈ R p with v∞ ≤
+0.7731 jointly with δ16k  A < 1 in [30] and δ A < 4/ 41 in [1].
+                                                2k
+                                                                             α and v1 ≤ sα must lie in a convex polytope whose
+   Similar to the RIP for the measurement matrix A in com-                   extremal points are s-sparse vectors u with u1 = v1 and
+pressed sensing given in Definition 1.1, a restricted isometry               u∞ ≤ α, and vice versa. This geometric fact turns out to be
+property for a linear map M in ARMP can be given. For                        a powerful tool in analyzing constrained 1 -norm minimization
+             X and Y in R
+two matrices                     m×n , define their inner product as         for compressed sensing and nuclear norm minimization for
+ X, Y =         j X i j Yi j and the Frobenius norm as X F =               ARMP, since it represents a non-sparse vector by the sparse
+√            i,
+    X, X =                2                                                  ones, which provides a bridge between general vectors and
+                  i, j X i j .
+                                                                             the RIP conditions. A graphical illustration of Lemma 1.1 is
+   Definition 1.2: Suppose M : Rn×m → Rq is a linear map                     given in Figure 1.
+and 1 ≤ r ≤ min(m, n) is an integer. The restricted isometry                    Combining the results developed in Sections II and III, we
+constant (RIC) of order r for M is defined as the smallest                   establish the following sharp sufficient RIP conditions for the
+number δrM such that for all matrices X with rank at most r ,                exact recovery of all k-sparse signals and low-rank matrices
+       (1 − δrM )X2F ≤ M(X)22 ≤ (1 + δrM )X2F .                 (6)    in the noiseless case. We focus here on the exact sparse and
+                                                                             noiseless case; the general approximately sparse (low-rank)
+When r is not an integer, we define δrM as δ M  r .
+                                                                             and noisy case is considered in Sections II and III.
+As in compressed sensing, there are many sufficient conditions                  Theorem 1.1: Let y = Aβ where β ∈ R p is a k-sparse
+based on the RIC to guarantee the exact recovery of matrices                 vector. If                      
+of rank at most r through the constrained         nuclear norm                                                 t −1
+                                    M <
+                                          √               M <                                         δt k <
+                                                                                                        A
+                                                                                                                                         (8)
+minimization (4). These include δ4r         2 − 1 [15], δ5r                                                      t
+         M                   M                     M
+0.607, δ4r < 0.558, and δ3r < 0.4721 [24], δ2r < 0.4931
+                                                M < 1/2 [9].                 for some t ≥ 4/3, then the 1 norm minimizer β̂ of (2) with
+[29], δrM < 0.307 [29], δrM < 1/3 [9], and δ2r
+                                                                             B = {0} recovers β exactly.
+   Among these sufficient RIP conditions, δkA < 1/3 and
+                                                                                Similarly, suppose b = M(X) where the matrix X ∈ Rm×n
+δrM < 1/3 have been verified in [9] to be sharp for both
+                                                                             is of rank at most r . If
+sparse signal recovery and low-rank matrix recovery problems.                                                
+Sharp conditions on the higher order RICs are however still                                             M      t −1
+                                                                                                       δtr <                         (9)
+unknown. As pointed out by Blanchard and Thompson [4],                                                           t
+higher-order RIC conditions can be satisfied by a significantly
+                                                                             for some t ≥ 4/3, then the nuclear norm minimizer X ∗ of (4)
+larger set of Gaussian random matrices in some settings. It is
+                                                                             with B = {0} recovers X exactly.
+therefore of both theoretical and practical interests to obtain
+                                                                              Moreover, it will be shown that for any  > 0, δt k <
+                                                                                                                                    A
+sharp sufficient conditions on the high order RICs.
+                                                                                t −1
+   In this paper, we develop a new elementary technique for                       t +    is not sufficient to guarantee the exact recovery
+the analysis of the constrained 1 -norm minimization and                    of all k-sparse signals for large k. Similar result also holds
+nuclear norm minimization procedures and establish sharp                     for matrix recovery. For the more general approximately
+RIP conditions on the high order RICs for sparse signal and                  sparse (low-rank) and noisy cases considered in Sections II
+low-rank matrix recovery. The analysis is surprisingly simple,               and III, it is shown that Conditions (8) and (9) are also
+while leads to sharp results. The key technical tool we develop              sufficient respectively for stable recovery of (approximately)
+states an elementary geometric fact: Any point in a polytope                 k-sparse signals and (approximately) rank-r matrices in the
+can be represented as a convex combination of sparse vectors.                noisy case. An oracle inequality is also given in the case of
+The following lemma may be of independent interest.                          compressed
+                                                                                    √      sensing with Gaussian noise under the condition
+   Lemma 1.1 (Sparse Representation of a Polytope): For a                    δtAk < (t − 1)/t when t ≥ 4/3.
+positive number α and a positive integer s, define the polytope                  The rest of the paper is organized as follows. Section II
+T (α, s) ⊂ R p by                                                            considers sparse signal recovery and Section III focuses on
+                                                                             low-rank matrix recovery. Discussions on the case t < 4/3
+         T (α, s) = {v ∈ R p : v∞ ≤ α, v1 ≤ sα}.                         and some related issues are given in Section IV. The proofs
+                                                                             of the key technical result Lemma 1.1 and the main theorems
+For any v ∈ R p , define the set of sparse vectors U (α, s, v) ⊂             are contained in Section V.
+R p by
+
+   U (α, s, v) = {u ∈ R p : supp(u) ⊆ supp(v), u0 ≤ s,                                         II. C OMPRESSED S ENSING
+                    u1 = v1 , u∞ ≤ α}.                          (7)       We consider compressed sensing in√this section and estab-
+                                                                             lish the sufficient RIP condition δtAk < (t − 1)/t in the noisy
+Then v ∈ T (α, s) if and only if v is in the convex hull of                  case which implies immediately the results in the noiseless
+U (α, s, v). In particular, any v ∈ T (α, s) can be expressed as
+                                                                             case given in Theorem 1.1. For v ∈ R p , we denote v max(k)
+              
+              N                                  
+                                                 N                           as v with all but the largest k entries in absolute value set to
+         v=         λi u i , and 0 ≤ λi ≤ 1,            λi = 1,              zero, and v − max(k) = v − v max(k) .
+              i=1                                 i=1                           Let us consider the signal recovery model (1) in the setting
+                         and u i ∈ U (α, s, v).                              where the observations contain noise and the signal is not
+
+      Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+124                                                                      IEEE TRANSACTIONS ON INFORMATION THEORY, VOL. 60, NO. 1, JANUARY 2014
+
+
+
+
+Fig. 1. A graphical illustration of sparse representation of a polytope in one orthant with p = 3 and s = 2. All the points in the colored area can be
+expressed as convex combinations of the sparse vectors represented by the three pointed black line segments on the edges.
+
+
+exactly k-sparse. This is of significant interest for many                   β− max(k) = 0, we have β̂ = β from (10), where β̂ is the
+applications. Two types of bounded noise settings,                           minimizer of (2) with B = {0}.
+                                                                                Remark 2.2: It should be noted that Theorems 1.1 and 2.1
+                     z ∈ B 2 (ε)  {z : z2 ≤ ε}
+                                                                             also hold for 1 < √     t < 4/3 with exactly the same proof.
+              and z ∈ B D S (ε)  {z : Az∞ ≤ ε},                           However the bound (t − 1)/t is not sharp for 1 < t < 4/3.
+are of particular interest. The first bounded noise case was                 See Section IV for further discussions. The condition t ≥ 4/3
+considered for example in [18]. The second case is motivated                 is crucial for the “sharpness” results given in Theorem 2.2 at
+by the Dantzig Selector procedure proposed in [13]. Results                  the end of this section.
+on the Gaussian noise case, which is commonly studied in                        The signal recovery model (1) with Gaussian noise is of
+statistics, follow immediately. For notational convenience, we               particular interest in statistics and signal processing. The fol-
+write δ for δtAk .                                                           lowing results on the i.i.d. Gaussian noise case are immediate
+   Theorem 2.1: Consider the signal recovery model (1) with                  consequences of the above results on the bounded noise cases
+z2 ≤ ε. Suppose β̂ 2 is the minimizer of (2) with B =                     using the same argument as that in [5], [6], since the Gaussian
+B 2                                                                         random variables are essentially bounded.
+√ (η) = {z : z2 ≤ η} for some η ≥ ε. If δ = δt k <
+                                                           A
+
+  (t − 1)/t for some t ≥ 4/3, then                                              Proposition √ 2.1: Suppose the error vector z ∼ Nn (0, σ 2 I )
+                      √                                                      in (1). δt k < (t − 1)/t for some t ≥4/3. Let β̂ 2 be the
+                                                                                        A
+                       2(1 + δ)                                                                                                 √
+     2
+ β̂ − β2 ≤           √          (ε + η)                                    minimizer of (2) with B = {z : z2 ≤ σ n + 2 n log n} and
+                   1 − t/(t − 1)δ                                                β̂ D S be the minimizer of (2) with B = {z : A T z∞ ≤
+                                                                             let √
+      √         √                    
+         2δ + t ( (t − 1)/t − δ)δ         2β− max(k) 1                     2σ log p}. Then with probability at least 1 − 1/n,
+  +             √                    +1        √         . (10)                                     √              
+             t ( (t − 1)/t − δ)                  k                                                 2 2(1 + δ)             
+                                                                              β 2 − β2 ≤          √           σ n + 2 n log n
+Now consider the signal recovery model (1) with                                                1 − t/(t − 1)δ
+                                                                                        √          √                      
+A T z∞ ≤ ε. Suppose β̂ D S is the minimizer of (2)                                        2δ + t ( (t − 1)/t − δ)δ           2β− max(k) 1
+with B = √ B D S (η) = {z : A T z∞ ≤ η} for some η ≥ ε. If                         +             √                     +1         √         ,
+                                                                                               t ( (t − 1)/t − δ)                     k
+δ = δt k < (t − 1)/t for some t ≥ 4/3, then
+      A
+                                                                                                                    √
+                      √                                                      and with probability at least 1 − 1/ π log p,
+                        2tk                                                                            √
+β̂ − β2 ≤
+   DS
+                     √            (ε + η)                                                                          
+                  1 − t/(t − 1)δ                                              β̂ − β2 ≤
+                                                                                 DS
+                                                                                                     √
+                                                                                                      4 2t
+                                                                                                                  σ k log p
+    √         √                       
+        2δ + t ( (t − 1)/t − δ)δ          2β− max(k) 1                                        1 − t/(t − 1)δ
+ +            √                      +1       √          . (11)                         √          √                       
+           t ( (t − 1)/t − δ)                   k                                           2δ + t ( (t − 1)/t − δ)δ           2β− max(k) 1
+                                                                                      +            √                     +1         √          .
+   Remark 2.1: The result for the noiseless case follows                                        t ( (t − 1)/t − δ)                    k
+directly from Theorem 2.1. When β is exactly k-sparse and                       The oracle inequality approach was introduced by Donoho
+there is no noise, by setting η =  = 0 and by noting                        and Johnstone [20] in the context of wavelet thresholding
+
+      Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+CAI AND ZHANG: SPARSE REPRESENTATION OF A POLYTOPE                                                                                                   125
+
+
+
+for signal denoising. It provides an effective way to study                  by (4) with B = B 2 (η) and B = B D S (η) respectively, where
+the performance of an estimation procedure by comparing
+                                                                                                 B 2 (η) = {z : z2 ≤ η},                         (13)
+it to that of an ideal estimator. In the context of com-
+pressed sensing, oracle inequalities have been given in [7],                                    B D S (η) = {z : M∗ (z) ≤ η}.                     (14)
+[9], [13], [15] under various settings. Proposition 2.2 below                    Proposition 3.1: Consider ARMP (3) with z2 ≤ ε. Let
+provides an oracle inequality for compressed    √ sensing with               X ∗2 be the minimizer of (4)             2
+                                                                                                         √ with B = B (η) defined in (13)
+Gaussian noise under the condition δtAk < (t − 1)/t when                                           M
+                                                                             for some η ≥ . If δr < (t − 1)/t with t ≥ 4/3, then
+t ≥ 4/3.                                                                                           √
+   Proposition 2.2: Given (1), suppose the error vector z ∼                                          2(1 + δ)
+                                                                              X ∗2 − X F ≤       √          (ε + η)
+                                √ β̂
+Nn (0, σ 2 I ), β is k-sparse. Let   D S be the minimizer of (2)
+                                                  √                                             1 − t/(t − 1)δ
+                                                                                   √         √                    
+with B = {z : A z∞ ≤ 4σ log p}. If δtAk < (t −
+                    T
+                                                      √1)/t for                        2δ + t ( (t − 1)/t − δ)δ        2X − max(r) 1
+some t ≥ 4/3, then with probability at least 1 − 1/ π log p,                     +           √                   +1         √          . (15)
+                                                                                          t ( (t − 1)/t − δ)                  r
+                                               
+ β̂ D S − β22 ≤       √
+                          256t
+                                         log p       min(βi2 , σ 2 ).        Similarly, consider ARMP (3) with z satisfying M∗ (z) ≤ ε.
+                   (1 − t/(t − 1)δtAk )2         i
+                                                                             Let X ∗D S be the minimizer of (4) with M = B D S (η) defined
+                                                                 (12)        in (14), then
+   We  now   turn to show the sharpness   of the   condition  δ  A <                                   √
+√                                                               t k                                       2tr
+  (t − 1)/t for the exact recovery in the noiseless case and                      DS
+                                                                              X ∗ − X F ≤          √             (ε + η)
+                                                                                                 1 − t/(t − 1)δ
+stable recovery in the noisy case. It should be noted that the                     √        √                       
+result in the special case t = 2 was shown in [17].                                   2δ + t ( (t − 1)/t − δ)δ          2X − max(r) 1
+                                                                                 +          √                       +1        √         . (16)
+   Theorem 2.2: Let t ≥ 4/3. For all ε > 0 and k ≥ 5/ε,                                 t ( (t − 1)/t − δ)                     r
+there exists a matrix A satisfying δt k < t −1 t + ε and some
+                                                                                In the special noiseless case where z = 0, it can be seen
+k-sparse vector β0 such that                                                 from either of these two inequalities above that all matrices
+                                                                             X with√rank at most r can be exactly recovered provided that
+  • in the noiseless case, i.e. y = Aβ0 , the 1 minimization                 M < (t − 1)/t, for some t ≥ 4/3.
+                                                                             δtr
+    method (2) with B = {0} fail to exactly recover the                                                                                  M
+    k-sparse vector β0 , i.e. β̂ = β0 , where β̂ is the solution            √ The following result shows that the condition δtr <
+                                                                               (t − 1)/t with t ≥ 4/3 is sharp. These results together
+    to (2).                                                                                                       M (t ≥ 4/3) for the exact
+                                                                             establish the optimal bound on δtr
+  • in the noisy case, i.e. y = Aβ0 + z, for all constraints
+                                                                             recovery in the noiseless case.
+    Bz (may depends on z), the 1 minimization method (2)
+                                                                                Proposition 3.2: Suppose t ≥ 4/3. For all ε√> 0 and r ≥
+    fails to stably recover the k-sparse vector β0 , i.e. β̂  β                                                        M < (t − 1)/t + ε
+                                                                             5/ε, there exists a linear map M with δtr
+    as z → 0, where β̂ is the solution to (2).
+                                                                             and some matrix X 0 of rank at most r such that
+                                                                                • in the noiseless case, i.e. b = M(X 0 ), the nuclear norm
+                                                                                  minimization method (4) with B = {0} fails to exactly
+              III. A FFINE R ANK M INIMIZATION
+                                                                                  recover X 0 , i.e. X ∗ = X 0 , where X ∗ is the solution to
+                                                                                  (4).
+   We consider the affine rank minimization problem (3) in
+                                                                                • in the noisy case, i.e. b = M(X 0 ) + z, for all constraints
+this section. As mentioned in the introduction, this problem
+                                                                                  Bz (may depends on z), the nuclear norm minimization
+is closely related to compressed sensing. The close connec-
+                                                                                  method (4) fails to stably recover X 0 , i.e. X ∗  X 0 as
+tions between compressed sensing and ARMP have been
+                                                                                  z → 0, where X ∗ is the solution to (4) with B = Bz .
+studied in Oymak, et al. [25]. We shall present here the
+analogous results on affine rank minimization without detailed
+proofs.                                                                                                 IV. D ISCUSSION
+   For a matrix X ∈ Rm×n (without loss of generality, assume                    We shall focus the discussions in this section exclusively on
+m m ≤ Tn) with the singular value decomposition X =
+that                                                                         compressed sensing as the results on affine rank minimization
+   i=1 ai u i v i where the singular
+                                                                             is analogous. In Section II, we have established the sharp RIP
+                                  r values aTi are in descending
+order,
+m      we     define  X max(r) =   i=1 ai u i v i and X − max(r) =
+                                                                             condition on the high-order RICs,
+                                                                                                     
+   i=r+1 ai u i v i . We should also note that the nuclear norm
+                  T
+                                                                                                       t −1
+ · ∗ of a matrix equals the sum of the singular values,                                     δt k <
+                                                                                                A
+                                                                                                            for some t ≥ 43 ,
+and the spectral norm  ·  of a matrix equals its largest                                               t
+singular value. Their roles are similar to those of 1 norm                  for the recovery of k-sparse signals in compressed sensing. In
+and ∞ norm in the vector case, respectively. For a linear                   addition, it is known from [9] that δkA < 1/3 is also a sharp
+operator M : Rm×n → Rq , its dual operator is denoted by                     RIP condition. For a general t > 0, denote the sharp bound
+M∗ : Rq → Rm×n .                                                             for δtAk as δ∗ (t). Then
+   Similarly as in compressed sensing, we first consider the                                                   
+                                                                                  δ∗ (1) = 1/3 and δ∗ (t) = (t − 1)/t, t ≥ 4/3.
+matrix recovery model (3) in the case where the error vector
+z is in bounded sets: z2 ≤  and M∗ (z) ≤ ε. The                         A natural question is: What is the value of δ∗ (t) for t < 4/3
+corresponding nuclear norm minimization methods are given                    and t = 1? That is, what is the sharp bound for δtAk when
+
+      Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+126                                                                          IEEE TRANSACTIONS ON INFORMATION THEORY, VOL. 60, NO. 1, JANUARY 2014
+
+
+
+
+                                                                                 Fig. 3.   Plot of n ∗ as a function of t.
+Fig. 2.     Plot of δ∗ as a function of t. The dotted line is t = 4/3.
+                                                                                 Hence, for t ≥ 4/3,
+                                                                                          
+t < 4/3 and t = 1? We have the following partial answer to                      P(δtAk < (t − 1)/t)
+                                                                                                                                        
+the question
+                                                                                           ≥ 1 − 2 exp tk log(12e/ t (t − 1)) + log( p/k)
+  Proposition 4.1: Let y = Aβ where β ∈ R p is k-sparse.
+Suppose 0 < t < 1 and tk ≥ 0 to be an integer                                                                                             
+                                                                                                                      t − 1 (t − 1)3/2
+                                                                                                              −n           −                .
+   • When tk is even and δtAk < 4−t
+                                 t
+                                    , the 1 minimization (2)                                                          16t    48t 3/2
+     with B = {0} recovers β exactly. √
+   • When tk is odd and δtAk <
+                                           t 2 −1/ k 2
+                                             √         , the 1                  For 0 < t < 4/3, using the conjectured value δ∗ (t) = 4−t
+                                                                                                                                        t
+                                                                                                                                           , we
+                                                   4−2t +   t 2 −1/ k 2          have
+      minimization (2) with B = {0} recovers β exactly.
+   In addition, the following result shows that δ∗ (t) ≤ 4−t
+                                                           t
+                                                              for                  P(δtAk < t/(4 − t))
+all 0 < t < 4/3. In particular, when t = 1, the upper bound
+t/(4 − t) coincides with the true sharp bound 1/3.                                         ≥ 1 − 2 exp tk(log(12(4 − t)e/t 2 ) + log( p/k))
+   Proposition 4.2: For 0 < t < 4/3, ε > 0 and any integer                                                                                        
+k ≥ 1, δtAk < 4−t  t
+                      + ε is not suffient for the exact recovery.                                                         t2            t3
+                                                                                                               −n                 −                 .
+Specifically, there exists a matrix A with δtAk = 4−tt
+                                                         and a k-                                                     16(4 − t) 2   48(4 − t)3
+sparse vector β0 such that β̂ = β0 , where β̂ is the minimizer                  It is easy to see when p, k, and p/k →√∞, the lower bound
+of (2) with B = {0}.                                                             of n to ensure δtAk < t/(4 − t) or δtAk < (t − 1)/t to hold in
+Propositions 4.1 and 4.2 together show that δ∗ (t) = 4−t t
+                                                            when                 high probability is n ≥ k log( p/k)n ∗ (t), where
+tk is even and 0 < t < 1. We are not able to provide a                                          ⎧                                
+complete answer for δ∗ (t) when 0 < t < 4/3. We conjecture                                      ⎨ t/       t2
+                                                                                                                   −       t3
+                                                                                                                                    t < 4/3;
+that δ∗ (t) = 4−tt
+                     for all 0 < t < 4/3. The following figure                            n∗         16(4−t ) 2    48(4−t )  3
+
+                                                                                                ⎩ t/     −1     (t −1) 3/2
+                                                                                                        16t − 48t 3/2         ,     t ≥ 4/3.
+                                                                                                       t
+plots δ∗ (t) as a function of t based on this conjecture for the
+interval (0, 4/3).
+   Our results show that exact recovery of                                       For the plot of n ∗ (t), see Figure 1. n ∗ (t) has minimum 83.2
+                                            √ k-sparse signals in                when t = 1.85. Moreover, among integer t, t = 2 can also
+the noiseless case is guaranteed if δtAk < (t − 1)/t for some
+t ≥ 4/3. It is then natural to ask the question: Among all                       provide a near-optimal minimum: n ∗ (2) = 83.7.
+these RIP conditions δtAk < δ∗ (t), which one is easiest to be                     We should note that the above analysis is based on the bound
+satisfied? There is no general answer to this question as no                     given in (17) which itself can be possibly improved.
+condition is strictly weaker or stronger than the others. It is
+however interesting to consider special random measurement                                                        V. P ROOFS
+matrices A = (Ai j )n× p where
+                                                                                     We shall first establish the technical result, Lemma 1.1, and
+                                                    √                            then prove the main results.
+                                                  1/ √
+                                                     n  w.p.1/2
+             Ai j ∼ N (0, 1/n),        Ai j ∼                   ,                    Proof of Lemma 1.1: First, suppose v ∈ T (α, s). We can
+                                                  −1/ n w.p.1/2
+                   ⎧√                                                            prove v is in the convex hull of U (α, s, v) by induction. If v
+                   ⎨ 3/n   w.p.1/6                                               is s-sparse, v itself is in U (α, s, v).
+          or Ai j ∼ 0 √    w.p.1/2 .                                                 Suppose the statement is true for all (l − 1)-sparse vectors v
+                   ⎩
+                     − 3/n w.p.1/6                                               (l−1 ≥ s). Then for any l-sparse vector v such that v∞ ≤ α,
+                                                                                 v1 ≤ sα, without loss of generality we assume that v is not
+Baraniuk et al [2] provides a bound on RICs for a set of                         (l − 1)-sparse (otherwise the result holds by   l assumption of
+random matrices from concentration of measure. For these                         l − 1). Hence we can express v as v =               i=1 ai ei , where
+random measurement matrices, Theorem 5.2 of [2] shows that                       ei ’s are different unit vectors with one entry of ±1and other
+for positive integer m < n and 0 < λ < 1,                                        entries of zeros; a1 ≥ a2 ≥ · · · ≥ al > 0. Since li=1 ai =
+                                  m                                             v1 ≤ sα, so
+                           12ep                           
+P(δmA < λ) ≥ 1−2                    exp −n(λ2 /16 − λ3 /48) .             (17)
+                            mλ                                                   1 ∈ D  {1 ≤ j ≤ l − 1 : a j + a j +1 + · · · + al ≤ (l − j )α},
+
+          Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+CAI AND ZHANG: SPARSE REPRESENTATION OF A POLYTOPE                                                                                                                        127
+
+
+
+which means D is not empty. Take the largest element in D                                       Proof of Theorem 1.1: First, we assume that tk is an integer.
+as j , which implies                                                                         By the well-known Null Space Property (Theorem 1 in [27]),
+                                                                                             we only need to check for all h ∈ N (A) \ {0}, h max(k) 1 <
+               a j + a j +1 + · · · + al ≤ (l − j )α,
+                                                                                             h − max(k) 1 . Suppose there exists h ∈ N (A) \ {0}, such that
+             a j +1 + a j +2 + · · · + al > (l − j − 1)α.                             (18)   h max(k) 1 ≥ h − max(k) 1 . Set α = h max(k) 1 /k. We divide
+(It is noteworthy that even if the largest j in D is l − 1, (18)                             h − max(k) into two parts, h − max(k) = h (1) + h (2) , where
+still holds). Define                                                                                        h (1) = h − max(k) · 1{i||h − max(k) (i)|>α/(t −1)} ,
+                     l
+                        i= j ai                                                                             h (2) = h − max(k) · 1{i||h − max(k) (i)|≤α/(t −1)}.
+               bw              − aw , j ≤ w ≤ l,           (19)
+                       l− j                                                                  Then h (1) 1 ≤ h − max(k) 1 ≤ αk. Denote |supp(h (1) )| =
+                                       
+which satisfies li= j ai = (l − j ) li= j bi . By (18), for all                              h (1) 0 = m. Since all non-zero entries of h (1) have magnitude
+j ≤ w ≤ l,                                                                                   larger than α/(t − 1), we have
+                           l
+                                          l − j −1                                           αk ≥ h (1) 1
+                             i= j +1 ai                                                                                                  
+             bw ≥ b j =                 −          aj                                           =                        |h (1)(i )| ≥                α/(t − 1) = mα/(t − 1).
+                              l−j           l− j
+                    l                                                                                i∈supp(h (1) )                 i∈supp(h (1) )
+                      i= j +1 ai − (l − j − 1)α
+                ≥                                > 0.                                        Namely m ≤ k(t − 1). In addition we have
+                                l−j
+In addition, we define                                                                                h (2) 1 = h − max(k) 1 − h (1) 1
+                     j −1
+                                                                                                                          mα                         α
+                                        
+                                         l               
+                                                         l                                                      ≤ kα −          = (k(t − 1) − m) ·      ,
+           vw              a i ei + (          bi )                ei ∈ R p ,                                          t −1                       t −1
+                                                                                                                    α
+                     i=1                 i= j          i= j,i =w                                    h (2) ∞ ≤        .                                 (21)
+                                                                                                                  t −1
+                        bw
+           λw  l                 ,     j ≤ w ≤ l,                                   (20)   We now apply Lemma 1.1 with s = k(t − 1) − m. Then h (2)
+                        i= j bi                                                              can be expressed   as a convex combination of sparse vectors:
+                       l             l                                                            N
+then 0 ≤ λw ≤ 1,                                                                             h (2) = i=1  λi u i , where u i is (k(t − 1) − m)-sparse and
+                         w= j λw = 1,  w= j λw v w = v,
+supp(v w ) ⊆ supp(v). We also have                                                                                                            α
+                                                                                                         u i 1 = h (2) 1 , u i ∞ ≤           ,
+             j −1                                         j −1                                                                             (t − 1)
+                                       
+                                        l                              
+                                                                        l
+ v w 1 =          ai + (l − j )               bw =             ai +          ai = v1 ,            supp(u i ) ⊆ supp(h (2) ).                        (22)
+             i=1                        w= j              i=1           i= j
+                                                                                             Hence,
+                                           
+                                           l
+                                                                                                                                              
+v w ∞ = max{a1 , . . . , a j −1 ,               bi }                                                u i 2 ≤           u i 0 u i ∞ ≤k(t − 1) − mu i ∞
+                                           i= j
+                                                                                                                                          
+                        l                                                                                       ≤        k(t − 1)u i ∞ ≤ k/(t − 1)α.                  (23)
+                              i= j ai
+         ≤ max{α,             } ≤ α.                                                         Now we suppose μ ≥ 0, c ≥ 0 are to be determined. Denote
+                       l−j
+                                                                                             βi = h max(k) + h (1) + μu i , then
+The last inequality is due to the first part of (18). Finally, note
+that v w is (l − 1)-sparse, we can use the induction assumption                              
+                                                                                             N
+                                                                                                    λ j β j −cβi = h max(k) +h (1) + μh (2) − cβi
+to find {u i,w ∈ R p , λi,w ∈ R : 1 ≤ i ≤ Nw , j ≤ w ≤ l} such
+                                                                                             j =1
+that
+                                                                                                                     = (1−μ−c)(h max(k) +h (1) )−cμu i +μh. (24)
+      u i,w is s-sparse, supp(u i,w ) ⊆ supp(v i ) ⊆ supp(v),
+                                                                                             Since h max(k) , h (1) , u i are k-, m-, (k(t − 1) − m)-sparse
+      u i,w 1 = v i 1 = v1 , u i,w ∞ ≤ α;                                                                                        
+                          Nw                        l      Nw                             respectively, βi = h max(k) + h (1) + μu i , Nj=1 λ j β j − cβi −
+In addition, v i =         i=1 λi,w u i,w , so v =     w= j   i=1                            μh = (1 − μ − c)(h max(k) + h (1) ) − cμu i are all tk-sparse
+λw λi,w u i,w , which proves the result for l.                                               vectors.
+   The proof of the other part of the lemma is easier. When v                                   We can check the following identity in 2 norm,
+is in the convex hull of U (α, s, v), then we have
+                                                                                                    
+                                                                                                    N              
+                                                                                                                   N
+                            
+                            N                      
+                                                   N                                                      λi A(          λ j β j − cβi )22
+          v∞ =                 λi u i ∞ ≤              λi u i ∞ ≤ α,                          i=1            j =1
+                            i=1                   i=1                                                                          
+                                                                                                           +(1 − 2c)                     λi λ j A(βi − β j )22
+                            N                    
+                                                  N
+                                                                                                                            1≤i< j ≤N
+           v1 =                λi u i 1 ≤             λi u i 1
+                            i=1                   i=1                                                              
+                                                                                                                   N
+                                                                                                             =            λi (1 − c)2 Aβi 22 .                         (25)
+                        
+                        N
+                    ≤         λi u i 0 u i ∞ ≤ sα,                                                             i=1
+                                                                                                                                  
+                        i=1                                                                  Since Ah = 0 and (24), we have A( Nj=1 λ j β j − cβi ) =
+which finished the proof of the lemma.                                                      A((1 − μ − c)(h max(k) + h (1) ) − cμu i ). Set c = 1/2,
+
+      Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+128                                                                             IEEE TRANSACTIONS ON INFORMATION THEORY, VOL. 60, NO. 1, JANUARY 2014
+
+
+     √
+μ = t (t − 1) − (t − 1), let the left hand side of (25) minus                       Then h (1) 1 ≤ h − max(k) 1 ≤ αk. Denote |supp(h (1) )| =
+the right hand side, we get                                                         h (1) 0 = m. Since all non-zero entries of h (1) have magnitude
+                                                                                    larger than α/(t − 1), we have
+ 0 ≤ (1 + δtAk )                                                                                                            
+              
+              N                                                                                      αk ≥ h (1) 1 =              |h (1) (i )|
+          ·         λi (1 − μ − c)2 h max(k) + h (1) 22 + c2 μ2 u i 22                                                     i∈supp(h (1) )
+                                                                                                       
+              i=1                                                                              ≥                    α/(t − 1) = mα/(t − 1).
+          −(1 − δtAk )                                                                             i∈supp(h (1) )
+
+              
+              N                                                                   Namely m ≤ k(t − 1). Hence, (21) still holds. Besides,
+          ·         λi (1 − c)2 h max(k) + h (1) 22 + μ2 u i 22                 h max(k) + h (1) 0 = k + m ≤ tk, we have
+              i=1
+                                                                                               A(h max(k) + h (1) ), Ah
+          
+          N
+                                       1                      1
+      =         λi         (1 + δtAk )( − μ)2 − (1 − δtAk ) ·                                         ≤ A(h max(k) + h (1) )2 Ah2
+                                        2                            4
+          i=1                                                                                           √
+                                  1                                                                  ≤ 1 + δh max(k) + h (1) 2 (ε + η).              (27)
+          ·h max(k) + h (1) 22 + δtAk μ2 u i 22
+                                  2                                                 Again by (21), we apply Lemma 1.1 by setting
+          
+          N                                                                         s = k(t − 1)− m, we can express h (2) as a weighted
+      ≤         λi h max(k) + h (1) 22                                            mean: h (2) = i=1 N
+                                                                                                          λi u i , where u i is (k(t − 1) − m)-sparse
+          i=1                                                                       and (22) still holds. Hence,
+                                                           
+                                1                  1                                                    
+          · (μ2 − μ) + δtAk        − μ + (1 +           )μ2                                  u i 2 ≤ u i 0 u i ∞
+                                2              2(t − 1)                                                 
+                                                           
+                                                                                                     ≤ k(t − 1) − mu i ∞
+      = h max(k) + h (1) 22 · δtAk (2t − 1)t − 2t t (t − 1)                                                                 
+                                                                                                 ≤ k(t − 1)u i ∞ ≤ k/(t − 1)α.
+        − (2t − 1) t (t − 1) − 2t (t − 1) < 0.
+                                                                                    Now we suppose 1 ≥ μ ≥ 0, c ≥ 0 are to be determined.
+We used the fact that                                                               Denote βi = h max(k) + h (1) + μu i , then we still have (24).
+                                                                                   Similarly to the proof of Theorem 1.1, since h max(k) , h (1) , u i
+             δtAk < (t − 1)/t,
+                                                                                   are k-, m-, (k(t − 1) − m)-sparsevectors, respectively, we
+         u i 2 ≤ k/(t − 1)α                                                       know βi = h max(k) + h (1) + μu i , Nj=1 λ j β j − cβi − μh =
+                                                                                    (1 − μ − c)(h max(k) + h (1) ) − cμu i are all tk sparse vectors.
+                               h max(k) 2   h max(k) + h (1) 2                                                             2β− max(k) 1
+                             ≤ √            ≤      √                                   Suppose x = h max(k) + h (1) 2 , P =       √         , then
+                                  (t − 1)             t −1                                                                                      k
+                                                                                                            
+above. This is a contradiction.                                                                u i 2 ≤  k/(t − 1)α
+   When tk is not an integer, note t  = tk /k, then t  > t,                                           h max(k) 2    2β− max(k) 1
+ 
+t k is an integer,                                                                                  ≤ √              + √
+                                                                                                           (t − 1)           k(t − 1)
+                                      
+                                t −1     t k − 1                                                       h max(k) + h (1) 2    2β− max(k) 1
+              δt  k = δt k <        <            ,                                                 ≤         √              + √
+                                  t          t k                                                               t −1                k(t − 1)
+which can be deduced to the former case. Hence we finished                                               x+P
+                                                                                                    = √          .
+the proof.                                                                                               t −1
+  Proof of Theorem 2.1: We first prove the inequality on β̂ 2                                                                             √
+                                                                                    We still use the 2 identity (25). Set c = 1/2, μ = t (t − 1)−
+(10). Again, we assume that tk is an integer at first. Suppose
+                                                                                    (t − 1) and take the difference of the left- and right-hand sides
+h = β̂ 2 − β, we shall use a widely known result (see, e.g.,
+                                                                                    of (25), we get
+[5], [12], [13], [19]),
+                                                                                           
+                                                                                           N         
+               h − max(k) 1 ≤ h max(k) 1 + 2β− max(k) 1 .                                     
+                                                                                     0=          λi A (h max(k) + h (1) + μh (2) )
+                                                                                           i=1
+Besides,
+                                                                                                                      2    N
+                                                                                                                                   λi
+                                                                                            1                          
+          Ah2 ≤ y − Aβ2 + Aβ̂ 2 − y2 ≤ ε + η.                         (26)         − (h max(k) + h (1) + μu i )  −            Aβi 22
+                                                                                            2                           2          4
+                                                                                                                             i=1
+Define α = (h max(k) 1 + 2β− max(k) 1 )/k. Similarly as the                                                                                 2
+                                                                                           
+                                                                                           N
+                                                                                                       1                             μ            
+proof of Theorem 1.1, we divide h − max(k) into two parts,                              =     λi 
+                                                                                                  A (   −  μ)(h max(k) + h (1)
+                                                                                                                                ) −     u i + μh  
+                                                                                                                                                  
+h − max(k) = h (1) + h (2) , where                                                         i=1
+                                                                                                       2                              2            2
+
+                 h   (1)
+                           = h − max(k) · 1{i||h − max(k) (i)|>α/(t −1)} ,                     
+                                                                                               N
+                                                                                                 λi
+                                                                                           −             Aβi 22
+                 h (2) = h − max(k) · 1{i||h − max(k) (i)|≤α/(t −1)}.                          i=1
+                                                                                                     4
+
+          Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+CAI AND ZHANG: SPARSE REPRESENTATION OF A POLYTOPE                                                                                                   129
+
+
+                                                       2                                                                             √
+        
+        N
+                    1                            μ                             Finally, note that h − max(k) 1 ≤ h max(k) 1 + P k, by
+    =     λi  A ( − μ)(h max(k) + h ) − u i 
+                                         (1)
+                                                         
+                     2                            2        2
+                                                                                 Lemma 5.3 in [9], we obtain h − max(k) 2 ≤ h max(k) 2 + P,
+      i=1
+                                                                              so
+                 1                              μ                                         
+      +2 A ( − μ)(h max(k) + h (1) ) − h (2) , μAh
+                 2                              2                                h2 = h max(k) 22 + h − max(k) 22
+                                                                                          
+                        λi
+                        N
+      +μ2 Ah22 −           Aβi 22                                                  ≤ h max(k) 22 + (h max(k) 2 + P)2
+                           4                                                              
+                       i=1
+                                                       2                            ≤ 2h max(k) 22 + P
+       
+       N
+                     1                            μ                                      √
+    =     λi 
+              A   (    − μ)(h        + h (1)
+                                              ) −   u    
+                                                                                      ≤ 2x + P
+                     2
+                               max(k)
+                                                  2
+                                                      i
+                                                                                          √
+        i=1                                                2                                 2t (t − 1)(1 + δ)
+                                          N                                         ≤ √                     (ε + η)
+                                               λi                                         t ( (t − 1)/t − δ)
+        +μ(1 − μ) A(h max(k) + h (1) ), Ah −      Aβi 22 .                                 √         √                   
+                                               4                                                 2δ + t ( (t − 1)/t − δ)δ       2β− max(k) 1
+                                                        i=1                               +            √                   +1        √
+                                                                                                    t ( (t − 1)/t − δ)                  k
+Now since βi , ( 12 − μ)(h max(k) + h (1) ) − μ2 u i are all tk-sparse                        √
+vectors, we apply the definition of δtAk and also (27) to get                                    2(1 + δ)
+                                                                                       =        √           (ε + η)
+                                                                                          1 − t/(t − 1)δ
+               
+               N                                                                            √         √                   
+                             1                                  μ2                               2δ + t ( (t − 1)/t − δ)δ       2β− max(k) 1
+0 ≤ (1 + δ)            λi ( − μ)2 h max(k) + h (1) 22 +           u i 22              +            √                   +1        √         ,
+                             2                                    4                                 t ( (t − 1)/t − δ)                  k
+                 i=1 √
+                                             (1)
+     +μ(1 − μ) 1 + δh max(k) + h 2 (ε + η)                                     which finished the proof.
+                        λi                                      
+                     N
+                                                                                   When tk is not an integer, again wedefine t  = tk /k,
+     −(1 − δ)                 h max(k) + h (1) 22 + μ2 u i 22                                                            t  −1
+                    i=1
+                          4                                                      then t  > t and δtA k = δtAk < t −1
+                                                                                                                     t <         t  . We can prove
+      N                                                                       the result by working on δt  k .
+                                                                                                                A
+                              1                         1
+  =        λi       (1 + δ)( − μ)2 − (1 − δ) ·                                     For the inequality on β̂ D S (11), the proof is similar. Define
+                              2                         4
+     i=1
+                           2 1                                                h = β̂ D S − β. We have the following inequalities
+                           
+     · h max(k) + h (1)  + δμ2 u i 22
+                              2 2                                                            A T Ah∞ ≤ A T (Aβ̂ 2 − y)∞
+                       √                         
+     +μ(1 − μ) 1 + δ h max(k) + h (1)  (ε + η)                                                           +A T (y − Aβ)∞ ≤ η + ε,
+                                                    2         
+           2                 1                      1        2                    A(h max(k) + h (1) ), Ah = h max(k) + h (1) , A T Ah
+  ≤ (μ − μ) + δ                 − μ + (1 +                )μ       x2
+                            2                2(t   −  1)
+                                                                                                            ≤ h max(k) + h (1) 1 (ε + η)
+                         √                   δμ2 P             δμ2 P 2                                         √
+     + μ(1 − μ) 1 + δ(ε + η) +                           x+                                                  ≤ tk(ε + η)h max(k)+h (1) 2 , (29)
+                                          t −1             2(t − 1)
+                                       t − 1                                 instead of (26) and (27). We can prove (11) basically the same
+  = −t (2t − 1) − 2 t (t − 1)                            − δ x2                  as the proof above except that we use (29) instead of (27) when
+                                                   t
+                                                                              we go from the third term to the fourth term in (28).         
+                      t     √                    δμ2 P             δμ2 P 2          Proof of Proposition 2.1: By a small √          extension of
+     + μ2                 · 1 + δ(ε + η) +                  x+
+                   t −1                         t −1            2(t − 1)       Lemma 5.1 in [5], we have z2 ≤ σ          n + 2 n log n with
+                       
+       μ  2                t −1                                                  probability at least 1 − 1/n; A z∞ ≤ σ 2(1 + δ1A ) log p ≤
+                                                                                                                  T
+  =              −t               − δ x2                                            √                                         √
+     t −1                    t                                                   2σ log p with probability at least 1 − 1/ π log p. Then the
+                                                       δ P2                  Proposition is immediately implied by Theorem 2.1.            
+     +        t (t − 1)(1 + δ)(ε + η) + δ P x +                  ,       (28)       Proof of Proposition 2.2: The proof of Proposition (2.2) is
+                                                            2
+                                                                                 similar to that of Theorem 4.1 in [9] and Theorem 2.7 in [15].
+which is an second-order inequality for x. By solving this
+                                                                                    First, as in the proof of Proposition √2.1, we have
+inequality we get
+                                                                                 A T z∞ ≤ λ/2 with probability at least 1/ π log n. In the
+                                                                              rest proof, we will prove (12) in the event that A T z∞ ≤ λ/2.
+x ≤          t (t − 1)(1 + δ)(ε + η) + δ P                                       Define
+                                       2                                                                                      λ2
+      +     t (t − 1)(1 + δ)(ε + η) + δ P                                         K (ξ, β) = γ ξ 0 + Aβ − Aξ 22 , γ =            = 2σ 2 log p.
+                                                                                                                                  8
+                              1/2                     −1
+   +2t ( (t − 1)/t − δ)δ P 2         · 2t ( (t − 1)/t − δ)                       Let β̄ = arg minξ K (ξ, β). Since K (β̄, β) ≤ K (β, β), we have
+    √                                                                            γ β̄0 ≤ γ β0 , which means β̄ is k-sparse.
+       t (t − 1)(1 + δ)                                                             Now we introduce the following lemma which can be
+  ≤ √                    (ε + η)
+   t ( (t − 1)/t − δ)                                                            regarded as an extension of Lemma 4.1 in [9].
+              √                                                                    Lemma 5.1: Suppose A ∈ Rn× p , k ≥ 2 is an integer, s > 1
+      2δ + 2t ( (t − 1)/t − δ)δ                                                  is real and sk is integer. Then we have δsk  A ≤ (2s − 1)δ A .
+   +            √                    P.                                                                                                       k
+            2t ( (t − 1)/t − δ)                                                  Similarly, suppose M : R    m×n → R is a linear map, r ≥ 2
+                                                                                                                       q
+
+
+       Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+130                                                                                   IEEE TRANSACTIONS ON INFORMATION THEORY, VOL. 60, NO. 1, JANUARY 2014
+
+
+
+is an integer, s > 1 is real and sr is integer. Then we have                             then β1 2 = 1. We define linear map A : R p → R p , such
+ M ≤ (2s − 1)δ M .
+δsr                                                                                      that for all β ∈ R p ,
+                  r
+We omit the proof here as the proof of Lemma 4.1 in [9] can                                                    
+still apply to this lemma.                                                                                        t −1
+                                                                                                      Aβ = 1 +          (β − β1 , β β1 ) .
+   By Lemma 5.1, we can see when 1 < t < 2,                                                                         t
+              2k                              
+    δ2k
+      A
+        ≤ (2      − 1)δ At k ≤ (4/t − 1)δtAk ≤ t/(t − 1)δtAk .                           Now for all tk -sparse vector β,
+              tk                                                                                              
+                                                                                              2            t −1
+When t ≥ 2, δ2k
+             A ≤ δ A , which means
+                  tk                                                                      Aβ2 = 1 +             (β − β1 , β β1 )T (β − β1 , β β1 )
+                                                                                                            t
+                  δ2k
+                    A
+                       ≤ t/(t − 1)δtAk ,                                                                      
+                                                                                                           t −1                       
+                                                                                  (30)
+whenever t ≥ 4/3.                                                                                = 1+               β22 − | β1 , β |2 .
+                                                                                                             t
+  Next, we have
+                                1                                                        Since β is tk -sparse, by Cauchy-Schwarz Inequality,
+           β̄ − β22 ≤              Aβ̄ − Aβ22
+                             1 − δ2k
+                                  A
+                                                                                         0 ≤ | β1 , β | 2
+                                      1                                                    ≤ β22 · β1 · 1supp(β) 22
+                           ≤     √             Aβ̄ − Aβ22 .                                                                       m 2 + k( tk − k)
+                             1 − t/(t − 1)δtAk                                              ≤ β22 β1,max( t k ) 22 = β22 ·
+                                                                                                                                         m 2 + mk
+With a small edition on Lemma 5.4 in [9] and Lemma 3.5 in                                     m 2 + k 2 (t − 1) + k         1
+[15], we have                                                                               ≤         2      
+                                                                                                                     ·           −m) β2
+                                                                                                                                           2
+                                                                                                   m +m k                   k(m
+                                                                                                                       1 − m 2 +m  k
+A T (y − Aβ̄)∞ ≤ A T (y − Aβ)∞ + A T A(β − β̄)∞ ≤ λ.                                    m 2 + k 2 (t − 1) m 2 + k 2 (t − 1) + k          1
+                                                                                            =                    ·                         ·             β22
+Since β̄ is k-sparse, we can apply Theorem 2.1 by plugging
+                                                                                                   2
+                                                                                                 m +m k             m + k (t − 1) 1 − 2  −m)
+                                                                                                                       2    2                  k(m
+                                                                                                                                                m +m  k
+                                                                                               √         √      √                 1        1
+β by β̄ and get                                                                             = 2 t − 1( t − t − 1) · (1 + ) ·                   β22
+                                                                                                                                tk 1 − 2k   1
+                                2tβ̄0                                                                                          5
+             β̂ − β̄2 ≤    √              2λ.                                             ≤ 2 t (t − 1) − 2(t − 1) · (1 + )β22
+                          1 − t/(t − 1)δtAk                                                                                       2k
+                                                                                                                            5
+Hence,                                                                                      ≤ 2 t (t − 1) − 2(t − 1) +             β22 .
+                                                                                                                            2k
+ β̂ − β22 ≤ 2β̂ − β̄22 + 2β̄ − β22
+                                                                                         We used the fact that m  ≥ k, 0 < m  − m ≤ 1 and
+            16tβ̄0 λ2                 2
+    ≤      √                 +     √            Aβ̄ − Aβ22                              m 2 + k 2 (t − 1)
+      (1− t/(t − 1)δt k )
+                        A  2   1− t/(t − 1)δtAk
+                                                                                             m 2 + m  k
+               128t                                                                                           "           √         #2
+    ≤       √                K (β̄, β).                                                                         (t − 1) + t (t − 1) + t − 1
+      (1 − t/(t − 1)δtAk )2                                                                      = "              √        #2 "             √   #
+               p                              γ                                                   (t − 1) + t (t − 1) + (t − 1) + t (t − 1)
+Suppose β  = i=1 β · 1{|βi |>μ} , where μ =        A . Then
+                                                                                                            "               √             #
+                                                                     1+δk                          (t − 1) t − 1 + t + 2 t (t − 1) + 1
+                                                                                                 =      √            "√     √        #2
+                                         
+                                         p
+                                                                                                          t (t − 1) t + (t − 1)
+      K (β̄, β) ≤ K (β  , β) ≤ γ               1{|βi |>μ} + Aβ  − Aβ22                              √                      √             
+                                                                                                      2 t −1             √              √
+                                          i=1                                                    = √      √          =2 t −1       t − t −1
+                       
+                       p                                    
+                                                            p                                         t + t −1
+                ≤γ            1{|βi |>μ} + (1 + δkA )             1{|βi |≤μ} |βi |2      above. Hence,
+                       i=1                                  i=1                                         
+                      
+                      p                                                                            t −1
+                ≤           min(γ , (1 + δkA )|βi |2 )                                        1+            β22 ≥ Aβ22
+                                                                                                    t                           
+                      i=1                                                                                                 
+                                                                                                              t −1           t −1 5
+                               
+                               p
+                                                                                                  ≥ 1−             − 1+              β22
+                ≤ 2 log p             min(σ 2 , |βi |2 ).                                                       t              t  2k
+                                                                                                                    
+                                i=1                                                                           t −1
+                                                                                                  ≥ 1−             − ε β22 ,
+Therefore, we have proved (12) in the event that A T z∞ ≤                                                     t
+λ/2.                                                                                                         √
+   Proof of Theorem 2.2: For    any ε > 0 and k  ≥ 5/ε, suppose                          which implies δtAk ≤ (t − 1)/t + ε.
+                             √
+p ≥ 2tk, m  = ((t − 1) + t (t − 1))k, m is the largest integer                            Now we consider
+strictly smaller than m  . Then m < m  and m  − m ≤ 1. Since                                                   k
+                                                                                                             !
+t ≥ 4/3, we have m  ≥ k. Define                                                                     β0 = (1, · · · , 1, 0, · · · , 0) ∈ R p ,
+                     −1      k              
+                                                  m
+                                                       !                                                        k            
+                                                                                                                                m
+                                                                                                                                      !
+               mk 2        !           k            k                                                      ! k                   k
+β1 = k +                (1, · · · , 1, −  , · · · , −  , 0, · · · , 0) ∈ R p ,                     γ0 = (0, · · · , 0,  , · · · ,  , 0, · · · , 0).
+               m 2                      m            m                                                                 m           m
+        Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+CAI AND ZHANG: SPARSE REPRESENTATION OF A POLYTOPE                                                                                                     131
+
+
+
+Note that Aβ1 = 0, so Aβ0 = Aγ0 . Besides, β0 is k-sparse                   For k > 1/ε, we have
+and γ0 1 < β0 1 .                                                                   4        tk
+   • In the noiseless case, i.e. y = Aβ0 , the 1 minimization              Aβ22 ≥       (1 −      )β22
+                                                                                       4−t       2k
+     method (2) fails to exactly recover β0 through y since                             4       tk                      t
+      y = Aγ0 , but γ0 1 < β0 1 .                                                ≥     (1 −     − ε/2)β22 > (1 −     − ε)β22 .
+                                                                                       4−t      2k                     4−t
+   • In the noisy case, i.e. y = Aβ0 + z, assume that 1
+     minimization method (2) can stably recover β0 with                     Therefore, we must have δtAk = δ At k < t/(4 − t) + ε.
+     constraint Bz . Suppose β̂z is the solution of 1 minimiza-              Finally, we define
+     tion, then lim z→0 β̂z = β0 . Note that y − A(β̂z − β0 +                                          k
+     γ0 ) = y − Aβ̂z ∈ Bz , by the definition of β̂z , we have                                   !
+                                                                                         β0 = (1, · · · , 1, 0, · · · , 0),
+     β̂z − β0 + γ0 1 ≥ β̂z 1 . Let z → 0, it contradicts that
+                                                                                                       k              k
+     γ0 1 < β0 1 . Therefore, 1 minimization method (2)                                             !                !
+     fails to stably recover β0 .                                                       β0 = (0, · · · , 0, −1, · · · , −1, 0, · · · , 0).
+   Proof of Proposition 4.1: We use the technical tools devel-              Then β0 , β0 are both k-sparse, and y = Aβ0 = Aβ0 . There’s
+oped in Cai and Zhang [10] to prove this result. We begin by                no way to recover both β0 , β0 only from (y, A).          
+introducing another important concept in the RIP framework
+- restricted orthogonal constants (ROC) proposed in [11].
+                                                                                                           R EFERENCES
+   Definition 5.1: Suppose A ∈ Rn× p , define the restricted
+orthogonal constants (ROC) of order k1 , k2 as the smallest                  [1] J. Andersson and J. Stromberg, “On the theorem of uniform recovery of
+                                                                                 random sampling matrices,” Dept. Math., R. Inst. Technol., Stockholm,
+non-negative number θkA1 ,k2 such that                                           Sweden, Jun. 2013.
+                                                                             [2] R. Baraniuk, M. Davenport, R. DeVore, and M. Wakin, “A simple proof
+              | Aβ1 , Aβ2 | ≤ θkA1 ,k2 β1 2 β2 2 ,                           of the restricted isometry property for random matrices,” Construct.
+                                                                                 Approximation, vol. 28, no. 3, pp. 253–263, 2008.
+for all k1 -sparse vector β1 ∈ R p and k2 -sparse vector β2 ∈ R p            [3] R. Baraniuk and P. Steeghs, “Compressive radar imaging,” in Proc. IEEE
+with disjoint supports.                                                          Radar Conf., Apr. 2007, pp. 128–133.
+Based on Theorem 2.5 in [10],                                                [4] J. Blanchard and A. Thompson, “On support sizes of restricted isom-
+                                                                                 etry constants,” Appl. Comput. Harmon. Anal., vol. 29, pp. 382–390,
+                             2k − tk A
+                      δtAk +        θt k,t k < 1             (31)                Mar. 2010.
+                                tk                                           [5] T. Cai, G. Xu, and J. Zhang, “On recovery of sparse signal via l1
+                                                                                 minimization,” IEEE Trans. Inf. Theory, vol. 55, no. 7, pp. 3388–3397,
+is a sufficient condition for exact recovery of all k-sparse                     Jul. 2009.
+vectors. By Lemma 3.1 in [10], θtAk,t k ≤ 2δtAk when tk is even;             [6] T. Cai, L. Wang, and G. Xu, “Shifting inequality and recovery of sparse
+θtAk,t k ≤ √ 2t k2 δtAk when tk is odd. Hence,                                   signals,” IEEE Trans. Signal Process., vol. 58, no. 3, pp. 1300–1308,
+           (t k) −1                                                              Mar. 2010.
+                                                                             [7] T. Cai, L. Wang, and G. Xu, “Stable recovery of sparse signals
+        2k − tk A         4−t A
+ δtAk +        θt k,t k ≤    δt k , tk is even;                                  and an oracle inequality,” IEEE Trans. Inf. Theory, vol. 56, no. 7,
+           tk             t                                                    pp. 3516–3522, Jul. 2010.
+                                                                             [8] T. Cai, L. Wang, and G. Xu, “New bounds for restricted isom-
+        2k − tk A               4k − 2tk
+   A
+ δt k +        θt k,t k ≤ 1 +               δtAk , tk is odd.                   etry constants,” IEEE Trans. Trans. Inf. Theory, vol. 56, no. 9,
+           tk                    (tk)2 − 1                                       pp. 4388–4394, Sep. 2010.
+                                                                             [9] T. Cai and A. Zhang, “Sharp RIP bound for sparse signal and low-
+The proposition is implied by the inequalities above and (31).                   rank matrix recovery,” Appl. Comput. Harmon. Anal. vol. 35, pp. 74–93,
+                                                                                Jan. 2013.
+                                                                            [10] T. Cai and A. Zhang “Compressed sensing and affine rank minimization
+  Proof of Proposition 4.2: The idea of the proof is quite                       under restricted isometry,” IEEE Trans. Signal Process., vol. 61, no. 13,
+similar to Theorem 3.2 by Cai and Zhang [9]. Define                              pp. 3279–3290, Apr. 2013.
+                                                                            [11] E. Candès and T. Tao, “Decoding by linear programming,” IEEE Trans.
+                                     2k
+                        1   !                                                  Inf. Theory, vol. 51, no. 12, pp. 4203–4215, Dec. 2005.
+                 γ = √ (1, · · · , 1, 0, · · · , 0),                        [12] E. Candès, J. Romberg, and T. Tao, “Stable signal recovery from
+                         2k                                                      incomplete and inaccurate measurements,” Commun. Pure Appl. Math.,
+                                                                                 vol. 59, no. 8, pp. 1207–1223, 2006.
+            A : Rp → Rp                                                     [13] E. Candès and T. Tao, “The dantzig selector: Statistical estimation when
+                          2
+                 β → √        (β − β, γ γ ) .                                   p is much larger than n,” Ann. Stat., vol. 35, no. 6, pp. 2313–2351, 2007.
+                         4−t                                                [14] E. J. Candès, “The restricted isometry property and its implications
+                                                                                 for compressed sensing,” Compte Rendus Math., vol. 346, nos. 9–10,
+Now for all non-zero tk -sparse vector β ∈ R p ,                                 pp. 589–592, 2008.
+                     4                                                      [15] E. Candès and Y. Plan “Tight oracle inequalities for low-rank
+         Aβ22 =        β − β, γ γ , β − β, γ γ                                 matrix recovery from a minimal number of noisy random measure-
+                    4−t                                                          ments,” IEEE Trans. Inf. Theory, vol. 57, no. 4, pp. 2342–2359,
+                     4                                                           Apr. 2009.
+                =       (β22 − β, γ 2 ).                                  [16] M. Davenport, J. Laska, J. Treichler, and R. Baraniuk, “The pros and
+                    4−t                                                          cons of compressive sensing for wideband signal acquisition: Noise
+We can immediately see Aβ22 ≤ (1 + t/(4 − t))β22 . On                        folding versus dynamic range,” IEEE Trans. Signal Process., vol. 60,
+                                                                                 no. 9, pp. 4628–4642, Sep. 2012.
+the other hand by Cauchy-Schwarz’s inequality,                              [17] M. Davies and R. Gribonval, “Restricted isometry constants where L p
+         β, γ 2 = β, γ · 1{supp(β)} 2                                            sparse recovery can fail for 0 < p ≤ 1,” IEEE Trans. Inf. Theory,
+                                                                                 vol. 55, no. 6, pp. 2203–2214, Jan. 2009.
+                                                tk                         [18] D. L. Donoho, M. Elad, and V. N. Temlyakov, “Stable recovery of sparse
+                ≤ β22 (        γi2 ) ≤ β22 ·    .                            overcomplete representations in the presence of noise,” IEEE Trans. Inf.
+                                                 2k
+                            i∈supp(β)                                            Theory, vol. 52, no. 1, pp. 6–18, Jan. 2006.
+
+     Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+132                                                                         IEEE TRANSACTIONS ON INFORMATION THEORY, VOL. 60, NO. 1, JANUARY 2014
+
+
+
+[19] D. L. Donoho and X. Huo, “Uncertainty principles and ideal atimoic         [29] H. Wang and S. Li, “The bounds of restricted isometry constants
+     decomposition,” IEEE Trans. Inf. Theory, vol. 47, no. 7, pp. 2845–2862,         for low rank matrices recovery,” Sci. China, Math., vol. 56, no. 6,
+     Nov. 2001.                                                                      pp. 1117–1127, 2012.
+[20] D. L. Donoho and I. M. Johnstone, “Ideal spatial adaptation by wavelet     [30] S. Zhou, L. Kong, and N. Xiu, “New bounds for RIC in compressed
+     shrinkage,” Biometrika, vol. 81, no. 3, pp. 425–455, 1994.                      sensing,” J. Operations Res. Soc. China, vol. 1, no. 2, pp. 227–237,
+[21] M. Herman and T. Strohmer, “High-resolution radar via compressed                2013.
+     sensing,” IEEE Trans. Signal Process., vol. 57, no. 6, pp. 2275–2284,
+     Jun. 2009.
+[22] M. Lustig, D. L. Donoho, J. M. Santos, and J. M. Pauly, “Compressed
+     sensing MRI,” IEEE Signal Process. Mag., vol. 25, no. 2, pp. 72–82,
+     Mar. 2008.
+[23] Q. Mo and S. Li, “New bounds on the restricted isometry constant δ2k ,”    T. Tony Cai received the Ph.D. degree from Cornell University, Ithaca, NY,
+     Appl. Comput. Harmon. Anal., vol. 31, no. 3, pp. 460–468, 2011.            in 1996. His research interests include high-dimensional inference, large-
+[24] K. Mohan and M. Fazel, “New restricted isometry results for noisy low-     scale multiple testing, nonparametric function estimation, functional data
+     rank recovery,” in Proc. ISIT, Jun. 2010, pp. 1573–1577.                   analysis and statistical decision theory. He is the Dorothy Silberberg Professor
+[25] S. Oymak, K. Mohan, M. Fazel, and B. Hassibi, “A simplified approach       of Statistics at the Wharton School of the University of Pennsylvania,
+     to recovery conditions for low-rank matrices,” in Proc. ISIT, 2011,        Philadelphia, PA, USA. Dr. Cai is the recipient of the 2008 COPSS Presidents
+     pp. 2318–2322.                                                             Award and a fellow of the Institute of Mathematical Statistics. He is the past
+[26] B. Recht, M. Fazel, and P. Parrilo, “Guaranteed minimum-rank solutions     editor of the Annals of Statistics.
+     of linear matrix equations via nuclear norm minimization,” SIAM Rev.,
+     vol. 52, no. 3, pp. 471–501, 2010.
+[27] M. Stojnic, W. Xu, and B. Hassibi, “Compressed sensing—Probabilistic
+     analysis of a null-space characterization,” in Proc. ICASSP, Apr. 2008,
+     pp. 3377–3380.                                                             Anru Zhang received the B.S. degree from Peking University, Beijing, China,
+[28] J. Tropp, J. Laska, M. Duarte, J. Romberg, and R. Baraniuk, “Beyond        in 2010. He is currently a Ph.D. student at the University of Pennsylvania,
+     nyquist: Efficient sampling of sparse, bandlimited signals,” IEEE Trans.   Philadelphia, PA. His research interests include high-dimensional inference,
+     Inf. Theory, vol. 56, no. 1, pp. 520–544, Jan. 2010.                       nonparametric function estimation and large-scale multiple testing.
+
+
+
+
+       Authorized licensed use limited to: SUN YAT-SEN UNIVERSITY. Downloaded on May 09,2025 at 14:06:14 UTC from IEEE Xplore. Restrictions apply.
+
