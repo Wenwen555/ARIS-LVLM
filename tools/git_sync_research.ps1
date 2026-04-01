@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-function Sync-Skills {
+function SyncClaudeSkills {
     <#
     .SYNOPSIS
     Sync project-level skills to user-level Claude skills directory.
@@ -19,7 +19,8 @@ function Sync-Skills {
     #>
 
     $projectSkillsDir = Join-Path $repoRoot "skills"
-    $userSkillsDir = Join-Path $env:USERPROFILE ".claude" "skills"
+    $userClaudeDir = Join-Path $env:USERPROFILE ".claude"
+    $userSkillsDir = Join-Path $userClaudeDir "skills"
 
     if (-not (Test-Path $projectSkillsDir)) {
         Write-Host "No project skills directory found." -ForegroundColor Yellow
@@ -222,4 +223,4 @@ Write-Host "You can now continue from another computer after pulling branch '$cu
 # Sync skills to user-level directory
 Write-Host ""
 Write-Host "Syncing skills to user-level..." -ForegroundColor Magenta
-Sync-Skills
+& SyncClaudeSkills
