@@ -1,42 +1,53 @@
 # Git 双机协作指南
 
-这份指南适用于当前仓库已经托管到 GitHub 的情况。目标是让两台电脑都围绕同一个远程仓库协作研究内容，避免文件来回手动复制。
+这份指南适用于当前仓库已经拆分为两个 remote 的情况：
 
-## 当前仓库状态
+- `origin` 是我们自己的私有仓库，用于双机同步与研究提交
+- `upstream` 是原始 ARIS 仓库，用于持续接收原项目更新
 
-- 远程仓库: `origin = https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep.git`
-- 默认分支: `main`
-- 推荐方式: 两台电脑都连接同一个 GitHub 仓库，通过 `commit + pull --rebase + push` 同步
+## 当前推荐结构
+
+```text
+origin   -> https://github.com/<your-name>/ARIS-LVLM.git
+upstream -> https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep.git
+```
+
+查看当前配置：
+
+```powershell
+git remote -v
+```
 
 ## 第一次配置
 
 ### 电脑 A
 
-在仓库根目录执行:
+在仓库根目录执行：
 
 ```powershell
 .\tools\setup_git_dual_machine.ps1
 ```
 
-这会为当前仓库设置:
+这会为当前仓库设置：
 
 - `pull.rebase=true`
 - `rebase.autoStash=true`
 - `fetch.prune=true`
-- `git ll` 日志别名
-- `git sync-research` 同步别名
+- `git ll`
+- `git sync-research`
 
 ### 电脑 B
 
-先克隆仓库:
+建议直接从自己的私有仓库克隆，而不是从 `upstream` 克隆：
 
 ```powershell
-git clone https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep.git
-cd Auto-claude-code-research-in-sleep
+git clone https://github.com/<your-name>/ARIS-LVLM.git
+cd ARIS-LVLM
+git remote add upstream https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep.git
 .\tools\setup_git_dual_machine.ps1
 ```
 
-如果两台电脑使用不同 Git 身份，也可以分别设置:
+如果两台电脑使用不同 Git 身份，也可以分别设置：
 
 ```powershell
 git config user.name "你的名字"
@@ -47,13 +58,13 @@ git config user.email "你的邮箱"
 
 ### 开始工作前
 
-每次在任意一台电脑开始之前，先同步远程最新进度:
+每次在任意一台电脑开始之前，先同步自己的私有仓库：
 
 ```powershell
 git sync-research
 ```
 
-如果你还没有配置别名，也可以直接执行:
+如果还没有配置别名，也可以直接执行：
 
 ```powershell
 .\tools\git_sync_research.ps1
@@ -61,13 +72,13 @@ git sync-research
 
 ### 工作完成后
 
-把当前改动保存并推送到远程:
+保存并推送当前改动：
 
 ```powershell
 .\tools\git_sync_research.ps1 -CommitMessage "research: update LVLM literature survey"
 ```
 
-这个命令会自动执行:
+这个命令会自动执行：
 
 1. `git add -A`
 2. `git commit -m "..."`
@@ -77,22 +88,36 @@ git sync-research
 
 ### 切换到另一台电脑
 
-到另一台电脑后，只需要:
+到另一台电脑后只需要：
 
 ```powershell
 git sync-research
 ```
 
-然后继续编辑即可。
+然后继续工作即可。
+
+## 同步上游更新
+
+为了获取原始 ARIS 仓库的新脚本、新工作流和 bugfix，定期执行：
+
+```powershell
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+```
+
+推荐使用 `merge`，因为它对两台电脑协作更稳，且不会改写已经在另一台电脑使用的提交历史。
 
 ## 推荐习惯
 
-- 同一份研究记录不要在两台电脑上同时修改后再一起推送，最好是一台提交后，另一台先拉取再继续。
-- 每次结束一个小阶段就提交一次，提交信息尽量描述研究动作，例如:
+- 同一份研究记录不要在两台电脑上并行修改太久
+- 每结束一个小阶段就提交一次
+- 提交信息尽量描述研究动作，例如：
   - `research: expand LVLM literature survey`
   - `research: add supplementary papers`
   - `research: refine idea report notes`
-- 如果你想把研究和项目主线隔离开，可以新建长期分支，例如:
+- 如果研究线较多，可以使用长期分支，例如：
 
 ```powershell
 git checkout -b research/lvlm
@@ -103,13 +128,13 @@ git push -u origin research/lvlm
 
 ## 冲突处理
 
-如果两台电脑修改了同一个文件，`git pull --rebase` 可能会提示冲突。常见处理流程:
+如果两台电脑修改了同一个文件，`git pull --rebase` 可能会提示冲突。常见处理流程：
 
 ```powershell
 git status
 ```
 
-打开冲突文件，手动保留正确内容后:
+打开冲突文件，手动保留正确内容后：
 
 ```powershell
 git add 冲突文件
@@ -117,7 +142,7 @@ git rebase --continue
 git push origin 当前分支
 ```
 
-如果想放弃这次 rebase:
+如果想放弃本次 rebase：
 
 ```powershell
 git rebase --abort
@@ -125,11 +150,6 @@ git rebase --abort
 
 ## 当前仓库的注意事项
 
-- `.claude/`、`.venv/`、缓存目录和日志文件已经加入 `.gitignore`，避免把机器本地状态同步到另一台电脑。
-- 你当前工作区里已经有未提交改动。在切换到另一台电脑之前，建议先运行:
-
-```powershell
-.\tools\git_sync_research.ps1 -CommitMessage "research: checkpoint current LVLM work"
-```
-
-这样第二台电脑就能直接拉到你现在的研究进度。
+- `.claude/`、`.venv/`、缓存目录和日志文件已经加入 `.gitignore`
+- 双机之间的日常同步只走 `origin`
+- 需要接收原仓库更新时，才显式执行 `git fetch upstream`
