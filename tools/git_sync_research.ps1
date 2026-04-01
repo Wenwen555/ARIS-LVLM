@@ -49,17 +49,48 @@ function Get-GitLine {
     return $output[0].ToString().Trim()
 }
 
+function Try-GetGitLine {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$Arguments
+    )
+
+    $output = & git @Arguments 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        return ""
+    }
+
+    $lines = @($output)
+    if ($lines.Length -eq 0) {
+        return ""
+    }
+
+    return $lines[0].ToString().Trim()
+}
+
 $insideRepo = Get-GitLine @("rev-parse", "--is-inside-work-tree")
 if ($insideRepo -ne "true") {
     throw "Current directory is not inside a git repository."
 }
 
-$repoRoot = Get-GitLine @("rev-parse", "--show-toplevel")
-Set-Location $repoRoot
+# Avoid relying on git's path output for Set-Location in non-ASCII paths.
+# When this script lives in repo/tools/, the parent directory is the repo root.
+$repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
+Set-Location -LiteralPath $repoRoot
 
 $currentBranch = Get-GitLine @("branch", "--show-current")
 if ([string]::IsNullOrWhiteSpace($currentBranch)) {
     throw "Could not determine the current branch."
+}
+
+$syncRemote = "origin"
+$syncRemoteBranch = "$syncRemote/$currentBranch"
+$trackingBranch = Try-GetGitLine @("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}")
+$configuredRemote = Try-GetGitLine @("config", "--get", "branch.$currentBranch.remote")
+$configuredMergeRef = Try-GetGitLine @("config", "--get", "branch.$currentBranch.merge")
+$configuredMergeBranch = ""
+if ($configuredMergeRef.StartsWith("refs/heads/")) {
+    $configuredMergeBranch = $configuredMergeRef.Substring("refs/heads/".Length)
 }
 
 $statusLines = @(Get-GitOutput -Arguments @("status", "--porcelain"))
@@ -67,7 +98,23 @@ $hasLocalChanges = $statusLines.Count -gt 0
 
 Write-Host "Repository : $repoRoot"
 Write-Host "Branch     : $currentBranch"
+Write-Host "Sync target: $syncRemoteBranch"
+if ([string]::IsNullOrWhiteSpace($trackingBranch)) {
+    Write-Host "Tracking   : (none configured)" -ForegroundColor Yellow
+}
+else {
+    Write-Host "Tracking   : $trackingBranch"
+}
+
+if (-not [string]::IsNullOrWhiteSpace($configuredRemote) -and -not [string]::IsNullOrWhiteSpace($configuredMergeBranch)) {
+    Write-Host "Configured : $configuredRemote/$configuredMergeBranch"
+}
+
 Write-Host "Has changes: $hasLocalChanges"
+
+if (($configuredRemote -and $configuredRemote -ne $syncRemote) -or ($configuredMergeBranch -and $configuredMergeBranch -ne $currentBranch)) {
+    Write-Host "Warning    : current branch tracking does not match this script's sync target ($syncRemoteBranch)." -ForegroundColor Yellow
+}
 
 if ($CommitMessage) {
     if (-not $hasLocalChanges) {
@@ -102,4 +149,5 @@ if (-not $SkipPush) {
 
 Write-Host ""
 Write-Host "Sync complete." -ForegroundColor Green
+Write-Host "Synchronized remote/branch: $syncRemoteBranch"
 Write-Host "You can now continue from another computer after pulling branch '$currentBranch'."
