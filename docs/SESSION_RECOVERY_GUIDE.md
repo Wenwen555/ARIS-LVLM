@@ -109,10 +109,12 @@ The Pipeline Status convention works without any tooling — the LLM just needs 
 
 | Hook | Event | Purpose |
 |------|-------|---------|
-| `session-restore.sh` | `PreToolUse` (first call) | New session → auto-read Pipeline Status + state files |
+| `session-restore.sh` | `SessionStart` | New session/resume → auto-read Pipeline Status + state files |
 | `context-refresh.sh` | `PreToolUse` (throttled) | Periodically inject Pipeline Status into context |
 | `pre-compact-remind.sh` | `PreCompact` | Remind LLM to save state before compaction |
-| `progress-remind.sh` | `PostToolUse` (Write/Edit) | Remind LLM to update EXPERIMENT_TRACKER.md after code changes |
+| `progress-remind.sh` | `PostToolUse` (Write/Edit/MultiEdit) | Remind LLM to update EXPERIMENT_TRACKER.md after code changes |
+
+> Important: do not attach recovery/reminder hooks to `WebSearch` or `WebFetch`. If you inject state reminders into web tools, searches can come back empty with only the reminder text. Keep `session-restore.sh` on `SessionStart`, and limit `PreToolUse` matchers to code/file tools such as `Bash|Read|Write|Edit|MultiEdit|Glob|Grep|Task`.
 
 ### Setup
 
@@ -126,24 +128,18 @@ mkdir -p ~/.claude/hooks
 
 ##### `session-restore.sh` — Auto-recover on new session
 
-The most important hook. On the first tool call of a new session, it reads your project's Pipeline Status and reminds the LLM which workflow to resume.
+The most important hook. On session start or resume, it reads your project's Pipeline Status and reminds the LLM which workflow to resume before any tool call happens.
 
 ```bash
 cat > ~/.claude/hooks/session-restore.sh << 'HOOKEOF'
 #!/bin/bash
-# PreToolUse hook: auto-recover project state on new session start.
-# Fires once per session (first tool call only).
+# SessionStart hook: auto-recover project state on new session start/resume.
 # Customize RESEARCH_ROOT to your project parent directory.
 
 RESEARCH_ROOT="${ARIS_RESEARCH_ROOT:-$HOME/research}"
 CWD=$(pwd)
 
 [[ "$CWD" != "$RESEARCH_ROOT"/* ]] && exit 0
-
-# Once per session (PID-based flag)
-FLAG="/tmp/aris-session-restore-$$"
-[ -f "$FLAG" ] && exit 0
-touch "$FLAG"
 
 # Find project root (nearest directory with CLAUDE.md)
 PROJECT_DIR=""
@@ -209,9 +205,16 @@ Keeps the LLM aware of current project state during long sessions.
 cat > ~/.claude/hooks/context-refresh.sh << 'HOOKEOF'
 #!/bin/bash
 # PreToolUse hook: periodically inject Pipeline Status into context.
-# Throttled to once every 30 tool calls.
+# Throttled to once every 30 code/file tool calls.
 
 INPUT=$(cat)
+TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
+
+case "$TOOL_NAME" in
+  Bash|Read|Write|Edit|MultiEdit|Glob|Grep|Task) ;;
+  *) exit 0 ;;
+esac
+
 RESEARCH_ROOT="${ARIS_RESEARCH_ROOT:-$HOME/research}"
 CWD=$(pwd)
 
@@ -279,7 +282,7 @@ INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
 
 case "$TOOL_NAME" in
-  Write|Edit) ;;
+  Write|Edit|MultiEdit) ;;
   *) exit 0 ;;
 esac
 
@@ -313,15 +316,22 @@ Add to `~/.claude/settings.json` (merge with existing hooks):
 ```json
 {
   "hooks": {
-    "PreToolUse": [
+    "SessionStart": [
       {
-        "matcher": "",
+        "matcher": "startup|resume|clear|compact",
         "hooks": [
           {
             "type": "command",
             "command": "~/.claude/hooks/session-restore.sh",
             "timeout": 5
-          },
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Write|Edit|MultiEdit|Glob|Grep|Task",
+        "hooks": [
           {
             "type": "command",
             "command": "~/.claude/hooks/context-refresh.sh",
@@ -343,7 +353,7 @@ Add to `~/.claude/settings.json` (merge with existing hooks):
     ],
     "PostToolUse": [
       {
-        "matcher": "",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -388,7 +398,7 @@ export ARIS_RESEARCH_ROOT="$HOME/my-projects"  # default: ~/research
    Resume work    Resume work
 
 Optional automation (Claude Code only):
-  session-restore.sh → auto-reads status on new session
+  session-restore.sh → auto-reads status on session start/resume
   context-refresh.sh → periodically re-injects status
   pre-compact-remind.sh → reminds to save before compaction
   progress-remind.sh → nudges to persist results

@@ -75,11 +75,41 @@ def _api_url(query: str, max_results: int, start: int) -> str:
     return f"{_API_BASE}?{urllib.parse.urlencode(params)}"
 
 
-def _fetch_atom(url: str) -> ET.Element:
-    """Fetch an arXiv Atom feed and return the parsed XML root."""
+def _fetch_atom(url: str, max_retries: int = 3, initial_delay: float = 2.0) -> ET.Element:
+    """Fetch an arXiv Atom feed and return the parsed XML root.
+
+    Args:
+        url: The arXiv API URL to fetch
+        max_retries: Maximum number of retry attempts for rate limiting
+        initial_delay: Initial delay in seconds before first retry
+
+    Raises:
+        RuntimeError: If all retries fail
+    """
     req = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return ET.fromstring(resp.read())
+
+    for attempt in range(max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return ET.fromstring(resp.read())
+        except urllib.error.HTTPError as exc:
+            if exc.code == 429 and attempt < max_retries:
+                # Rate limited - wait with exponential backoff
+                delay = initial_delay * (2 ** attempt)
+                print(f"Rate limited (attempt {attempt + 1}/{max_retries}), waiting {delay:.1f}s...")
+                time.sleep(delay)
+                continue
+            # For other HTTP errors or final retry attempt, raise
+            raise RuntimeError(f"HTTP {exc.code}: {exc.reason}") from exc
+        except urllib.error.URLError as exc:
+            if attempt < max_retries:
+                delay = initial_delay * (2 ** attempt)
+                print(f"Network error (attempt {attempt + 1}/{max_retries}), waiting {delay:.1f}s...")
+                time.sleep(delay)
+                continue
+            raise RuntimeError(f"Network error: {exc}") from exc
+
+    raise RuntimeError(f"Failed to fetch after {max_retries} retries")
 
 
 def _parse_entry(entry: ET.Element) -> dict:

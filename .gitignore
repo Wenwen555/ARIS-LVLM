@@ -8,11 +8,20 @@ Thumbs.db
 *~
 .vscode/
 .idea/
+.claude/
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
 
 # Environment
 .env
+
+# Logs
+*.log
