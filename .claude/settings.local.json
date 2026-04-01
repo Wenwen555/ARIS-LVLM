@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(arxiv)",
+      "Skill(arxiv:*)",
+      "mcp__codex__codex",
+      "Skill(novelty-check)",
+      "Skill(novelty-check:*)",
+      "Skill(semantic-scholar)",
+      "Skill(semantic-scholar:*)",
+      "Skill(research-refine)",
+      "Skill(research-refine:*)",
+      "WebSearch",
+      "WebFetch(domain:videohallucer.github.io)",
+      "WebFetch(domain:arxiv.org)",
+      "Bash(python tools/install_skills.py --check)",
+      "Bash(python tools/install_skills.py --clean-user)"
+    ]
+  },
+  "enabledPlugins": {
+    "claude-hud@claude-hud": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      },
+      "autoUpdate": true
+    }
+  }
+}

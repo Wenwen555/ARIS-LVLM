@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "literature-review",
+  "owner": "ricable",
+  "repo": "ultimate-ai-agent",
+  "path": "sources/ricable/claude-scientific-skills/scientific-skills/literature-review",
+  "branch": "main",
+  "sha": "9df0068175a467dff410973a45018f63e5e911ca",
+  "source": "manual"
+}

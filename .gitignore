@@ -8,7 +8,11 @@ Thumbs.db
 *~
 .vscode/
 .idea/
-.claude/
+
+# Claude Code project config - selective tracking
+# Track settings.local.json but ignore other .claude content
+.claude/*
+!.claude/settings.local.json
 
 # Python
 __pycache__/
