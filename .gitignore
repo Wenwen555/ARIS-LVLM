@@ -29,3 +29,5 @@ venv/
 
 # Logs
 *.log
+
+lgl/
